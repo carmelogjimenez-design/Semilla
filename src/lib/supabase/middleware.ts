@@ -1,7 +1,7 @@
 import { NextResponse, type NextRequest } from 'next/server';
 import { createServerClient } from '@supabase/ssr';
 
-import { isSupabaseConfigured, supabaseAnonKey, supabaseUrl } from '@/lib/env';
+import { isSupabaseConfigured, supabaseAnonKey, supabaseUrl } from '../env';
 import type { Database } from './database.types';
 
 /** Rutas que se pueden ver sin sesión. */
