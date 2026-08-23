@@ -1,0 +1,114 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ---------------------------------------------------------------------------
+   SEMILLA — base
+   Marca: FOREST #0F2B20 · LEAF #22C55E · SAGE #E7F1EA · OAT #FAF8F3 · CHARCOAL #111316
+   --------------------------------------------------------------------------- */
+
+@layer base {
+  :root {
+    --safe-bottom: env(safe-area-inset-bottom, 0px);
+    --safe-top: env(safe-area-inset-top, 0px);
+    --nav-height: 68px;
+  }
+
+  html {
+    -webkit-text-size-adjust: 100%;
+    -webkit-tap-highlight-color: transparent;
+    background-color: theme('colors.bg');
+  }
+
+  body {
+    @apply bg-bg text-ink antialiased;
+    font-feature-settings: 'ss01', 'cv01';
+    overscroll-behavior-y: none;
+  }
+
+  /* Los números se leen mejor alineados (§91) */
+  .tnum {
+    font-variant-numeric: tabular-nums;
+    font-feature-settings: 'tnum';
+  }
+
+  button,
+  a {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  :focus-visible {
+    outline: 2px solid theme('colors.seed.600');
+    outline-offset: 2px;
+    border-radius: 6px;
+  }
+
+  input,
+  select,
+  textarea {
+    font-size: 16px; /* evita el zoom automático de iOS */
+  }
+
+  ::-webkit-scrollbar {
+    width: 0;
+    height: 0;
+  }
+}
+
+@layer components {
+  .card {
+    @apply rounded-3xl bg-surface shadow-card;
+  }
+
+  .card-warm {
+    @apply rounded-3xl bg-warm;
+  }
+
+  .label {
+    @apply text-label uppercase text-muted;
+  }
+
+  .touch {
+    min-height: 44px;
+    min-width: 44px;
+  }
+
+  .no-scrollbar {
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+  }
+
+  .hairline {
+    @apply border-b border-stone-200/70;
+  }
+
+  /* Franja de scroll horizontal con respiro a los lados */
+  .rail {
+    @apply -mx-5 flex gap-3 overflow-x-auto px-5 pb-1 no-scrollbar;
+    scroll-snap-type: x proximity;
+  }
+
+  .rail > * {
+    scroll-snap-align: start;
+  }
+}
+
+@layer utilities {
+  .pb-nav {
+    padding-bottom: calc(var(--nav-height) + var(--safe-bottom) + 24px);
+  }
+
+  .pt-safe {
+    padding-top: calc(var(--safe-top) + 12px);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+  }
+}
