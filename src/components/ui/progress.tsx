@@ -63,9 +63,55 @@ export function ProgressRing({
           animate={{ strokeDashoffset: circumference * (1 - clamped) }}
           transition={{ type: 'spring', stiffness: 120, damping: 22 }}
         />
+
+        {/* Con el anillo a cero no se ve ni un trazo y la tarjeta parece rota.
+            Un punto en la salida dice «aquí empieza», que es la verdad. */}
+        {clamped === 0 ? (
+          <circle
+            cx={size / 2}
+            cy={thickness / 2}
+            r={thickness / 2 - 1}
+            className="fill-seed-300"
+          />
+        ) : null}
       </svg>
-      <div className="absolute inset-0 flex flex-col items-center justify-center">{children}</div>
+      <div className="absolute inset-0 flex flex-col items-center justify-center px-5 text-center">
+        {children}
+      </div>
     </div>
+  );
+}
+
+/**
+ * Un importe grande dentro de una caja estrecha —el hueco de un anillo— no puede
+ * usar un tamaño fijo: «496,77 €» se sale por los lados y «1.204,50 €» aún más.
+ * El cuerpo se elige por lo que ocupa el número ya formateado, no por diseño.
+ */
+export function FittedAmount({
+  value,
+  className = '',
+}: {
+  value: string;
+  className?: string;
+}) {
+  /* Medido sobre el hueco de un anillo de 168 px: por encima de estos cuerpos el
+     número roza el trazo y parece que se sale. */
+  const size =
+    value.length > 12
+      ? 'text-[19px]'
+      : value.length > 10
+        ? 'text-[23px]'
+        : value.length > 8
+          ? 'text-[27px]'
+          : value.length > 6
+            ? 'text-[31px]'
+            : 'text-display';
+  return (
+    <span
+      className={`block whitespace-nowrap font-bold leading-none tracking-[-0.03em] tnum ${size} ${className}`}
+    >
+      {value}
+    </span>
   );
 }
 

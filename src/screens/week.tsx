@@ -7,7 +7,7 @@ import { AmountSheet } from '@/components/flows/amount-sheet';
 import { TransactionDetailSheet } from '@/components/flows/transaction-detail-sheet';
 import { WeekCloseSheet } from '@/components/flows/week-close-sheet';
 import { TransactionRow } from '@/components/transaction-row';
-import { BudgetBar, ProgressRing } from '@/components/ui/progress';
+import { BudgetBar, FittedAmount, ProgressRing } from '@/components/ui/progress';
 import { Card, Chip, EmptyState, SectionTitle, StatusChip } from '@/components/ui/primitives';
 import { paceLabel, statusLabel } from '@/domain/calculations';
 import { nextWeekToClose, weekCloseDrafts, type WeekCloseDraft } from '@/domain/closing';
@@ -201,9 +201,10 @@ export function WeekScreen() {
           <span className="text-label text-muted">
             {week.planned === 0 ? 'Gastado' : overspent ? 'Por encima' : 'Disponible'}
           </span>
-          <span className="mt-1 text-display tnum text-ink">
-            {formatCurrency(week.planned === 0 ? week.spent : Math.abs(week.available))}
-          </span>
+          <FittedAmount
+            className="mt-1.5 text-ink"
+            value={formatCurrency(week.planned === 0 ? week.spent : Math.abs(week.available))}
+          />
         </ProgressRing>
 
         {week.planned > 0 ? (
