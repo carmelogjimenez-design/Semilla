@@ -171,8 +171,18 @@ export function HomeScreen() {
       <section className="mt-4">
         <SectionTitle>Está creciendo</SectionTitle>
         <div className="grid grid-cols-3 gap-2">
-          <GrowthTile emoji="🛡️" label="Ahorro" value={formatCurrency(view.savingsTotal)} />
-          <GrowthTile emoji="⚔️" label="Deuda reducida" value={formatCurrency(view.debtReducedSinceStart)} />
+          <GrowthTile
+            emoji="🛡️"
+            label="Ahorro"
+            value={formatCurrency(view.savingsTotal)}
+            href="/mas/huchas"
+          />
+          <GrowthTile
+            emoji="⚔️"
+            label="Deuda reducida"
+            value={formatCurrency(view.debtReducedSinceStart)}
+            href="/mas/deudas"
+          />
           <GrowthTile
             emoji="🔥"
             label="Racha"
@@ -323,14 +333,32 @@ function MonthFigure({
   );
 }
 
-function GrowthTile({ emoji, label, value }: { emoji: string; label: string; value: string }) {
-  return (
-    <div className="rounded-3xl bg-surface p-4 shadow-card">
+function GrowthTile({
+  emoji,
+  label,
+  value,
+  href,
+}: {
+  emoji: string;
+  label: string;
+  value: string;
+  href?: string;
+}) {
+  const content = (
+    <>
       <span className="text-lg" aria-hidden>
         {emoji}
       </span>
       <p className="mt-2 text-[11px] font-semibold uppercase tracking-wide text-muted">{label}</p>
       <p className="mt-0.5 text-[15px] font-semibold tnum text-ink">{value}</p>
-    </div>
+    </>
+  );
+  const className = 'block rounded-3xl bg-surface p-4 text-left shadow-card transition active:bg-warm';
+  return href ? (
+    <Link href={href} className={className}>
+      {content}
+    </Link>
+  ) : (
+    <div className={className}>{content}</div>
   );
 }

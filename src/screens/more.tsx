@@ -31,9 +31,13 @@ import { useSemilla } from '@/state/semilla-provider';
  * fase en la que llega, para que nadie toque un botón que no lleva a ningún sitio.
  */
 
+const AVAILABLE = [
+  { href: '/mas/presupuestos', icon: Sliders, label: 'Presupuestos', hint: 'Mes, semanas y límites por categoría' },
+  { href: '/mas/huchas', icon: PiggyBank, label: 'Huchas', hint: 'Ahorro y dinero reservado' },
+  { href: '/mas/deudas', icon: Flame, label: 'Deuda', hint: 'Saldos, cuotas y amortizaciones' },
+] as const;
+
 const UPCOMING = [
-  { icon: PiggyBank, label: 'Huchas', phase: 'Fase 3' },
-  { icon: Flame, label: 'Deudas', phase: 'Fase 3' },
   { icon: Repeat, label: 'Gastos fijos', phase: 'Fase 6' },
   { icon: Target, label: 'Objetivos', phase: 'Fase 4' },
   { icon: Award, label: 'Logros', phase: 'Fase 4' },
@@ -140,18 +144,25 @@ export function MoreScreen() {
       <section className="mt-6">
         <SectionTitle>Vuestro plan</SectionTitle>
         <Card className="px-2 py-1">
-          <Link href="/mas/presupuestos" className="block">
-            <div className="flex items-center gap-3 px-2 py-3.5">
-              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-sage">
-                <Sliders size={18} className="text-seed-700" aria-hidden />
-              </span>
-              <span className="flex-1">
-                <span className="block text-[15px] font-medium text-ink">Presupuestos</span>
-                <span className="block text-[13px] text-muted">Mes, semanas y límites por categoría</span>
-              </span>
-              <ChevronRight size={18} className="text-stone-400" />
-            </div>
-          </Link>
+          <div className="divide-y divide-stone-100">
+            {AVAILABLE.map((item) => {
+              const Icon = item.icon;
+              return (
+                <Link key={item.href} href={item.href} className="block">
+                  <div className="flex items-center gap-3 px-2 py-3.5">
+                    <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-sage">
+                      <Icon size={18} className="text-seed-700" aria-hidden />
+                    </span>
+                    <span className="min-w-0 flex-1">
+                      <span className="block text-[15px] font-medium text-ink">{item.label}</span>
+                      <span className="block truncate text-[13px] text-muted">{item.hint}</span>
+                    </span>
+                    <ChevronRight size={18} className="shrink-0 text-stone-400" />
+                  </div>
+                </Link>
+              );
+            })}
+          </div>
         </Card>
       </section>
 

@@ -478,6 +478,16 @@ export class SupabaseRepository implements SemillaRepository {
     );
   }
 
+  /**
+   * Límite de una categoría, mensual o semanal.
+   *
+   * No usa `upsert`: la unicidad de `budget_categories` se garantiza con índices
+   * PARCIALES (uno para límites mensuales y otro para semanales), y PostgreSQL no
+   * admite `ON CONFLICT` contra un índice parcial. Por eso se resuelve de forma
+   * explícita: buscar, y entonces actualizar, insertar o borrar.
+   *
+   * Un importe de 0 no guarda un cero: quita el límite.
+   */
   async saveCategoryLimit(input: {
     householdId: ID;
     month: MonthKey;
@@ -486,7 +496,10 @@ export class SupabaseRepository implements SemillaRepository {
     amount: number;
   }): Promise<void> {
     const { householdId, month, weekIndex, categoryId, amount } = input;
+    const context = 'No hemos podido guardar el límite de categoría';
 
+    // 1. Asegurar que existe el presupuesto al que cuelga el límite.
+    let budgetId: string;
     if (weekIndex === null) {
       const budget = check(
         await this.supabase
@@ -496,49 +509,64 @@ export class SupabaseRepository implements SemillaRepository {
           .single(),
         'No hemos podido preparar el presupuesto del mes',
       );
+      budgetId = budget.id;
+    } else {
+      const budget = check(
+        await this.supabase
+          .from('weekly_budgets')
+          .upsert(
+            { household_id: householdId, month, week_index: weekIndex },
+            { onConflict: 'household_id,month,week_index' },
+          )
+          .select('id')
+          .single(),
+        'No hemos podido preparar el presupuesto de la semana',
+      );
+      budgetId = budget.id;
+    }
+
+    const column = weekIndex === null ? 'monthly_budget_id' : 'weekly_budget_id';
+
+    // 2. ¿Ya había un límite para esta categoría en este presupuesto?
+    const existing = await this.supabase
+      .from('budget_categories')
+      .select('id')
+      .eq(column, budgetId)
+      .eq('category_id', categoryId)
+      .maybeSingle();
+    if (existing.error) throw new RepositoryError(`${context}: ${existing.error.message}`, existing.error);
+
+    // 3. Quitar, actualizar o crear.
+    if (amount <= 0) {
+      if (existing.data) {
+        checkVoid(
+          await this.supabase.from('budget_categories').delete().eq('id', existing.data.id),
+          'No hemos podido quitar el límite',
+        );
+      }
+      return;
+    }
+
+    if (existing.data) {
       checkVoid(
         await this.supabase
           .from('budget_categories')
-          .upsert(
-            {
-              household_id: householdId,
-              monthly_budget_id: budget.id,
-              weekly_budget_id: null,
-              category_id: categoryId,
-              amount_cents: amount,
-            },
-            { onConflict: 'monthly_budget_id,category_id' },
-          ),
-        'No hemos podido guardar el límite de categoría',
+          .update({ amount_cents: amount })
+          .eq('id', existing.data.id),
+        context,
       );
       return;
     }
 
-    const budget = check(
-      await this.supabase
-        .from('weekly_budgets')
-        .upsert(
-          { household_id: householdId, month, week_index: weekIndex },
-          { onConflict: 'household_id,month,week_index' },
-        )
-        .select('id')
-        .single(),
-      'No hemos podido preparar el presupuesto de la semana',
-    );
     checkVoid(
-      await this.supabase
-        .from('budget_categories')
-        .upsert(
-          {
-            household_id: householdId,
-            monthly_budget_id: null,
-            weekly_budget_id: budget.id,
-            category_id: categoryId,
-            amount_cents: amount,
-          },
-          { onConflict: 'weekly_budget_id,category_id' },
-        ),
-      'No hemos podido guardar el límite de categoría',
+      await this.supabase.from('budget_categories').insert({
+        household_id: householdId,
+        monthly_budget_id: weekIndex === null ? budgetId : null,
+        weekly_budget_id: weekIndex === null ? null : budgetId,
+        category_id: categoryId,
+        amount_cents: amount,
+      }),
+      context,
     );
   }
 

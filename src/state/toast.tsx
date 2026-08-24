@@ -83,8 +83,8 @@ export function ToastProvider({ children }: { children: ReactNode }) {
             >
               {item.emoji ? <span className="text-lg leading-none">{item.emoji}</span> : null}
               <div className="min-w-0 flex-1">
-                <p className="truncate text-sm font-semibold">{item.title}</p>
-                {item.detail ? <p className="truncate text-xs opacity-80">{item.detail}</p> : null}
+                <p className="text-sm font-semibold">{item.title}</p>
+                {item.detail ? <p className="line-clamp-3 text-xs leading-snug opacity-80">{item.detail}</p> : null}
               </div>
               {item.action ? (
                 <button

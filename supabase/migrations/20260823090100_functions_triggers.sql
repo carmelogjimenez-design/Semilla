@@ -350,7 +350,11 @@ begin
     p_household_id,
     btrim(p_email)::citext,
     p_role,
-    encode(gen_random_bytes(24), 'hex'),
+    -- 64 caracteres hexadecimales de un generador criptográfico.
+    -- No usamos gen_random_bytes: vive en la extensión pgcrypto, que en Supabase
+    -- está en el esquema `extensions` y quedaría fuera del search_path fijado
+    -- por seguridad en esta función. gen_random_uuid() es del núcleo.
+    replace(gen_random_uuid()::text, '-', '') || replace(gen_random_uuid()::text, '-', ''),
     uid
   )
   returning * into result;

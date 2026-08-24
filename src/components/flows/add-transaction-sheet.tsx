@@ -42,6 +42,8 @@ export interface AddSheetPreset {
   merchantName?: string;
   pocketId?: ID | null;
   debtId?: ID | null;
+  paymentType?: 'installment' | 'extra';
+  savingDirection?: 'in' | 'out';
   frequency?: 'ordinary' | 'extraordinary';
   plannedId?: ID | null;
   description?: string;
@@ -197,8 +199,8 @@ export function AddTransactionSheet({
     setSourceId(null);
     setPocketId(preset?.pocketId ?? null);
     setDebtId(preset?.debtId ?? null);
-    setPaymentType('extra');
-    setSavingDirection('in');
+    setPaymentType(preset?.paymentType ?? 'extra');
+    setSavingDirection(preset?.savingDirection ?? 'in');
     setFromAccountId(defaultAccount?.id ?? null);
     setToAccountId(null);
     setNecessity('necessary');

@@ -6,6 +6,8 @@ import { useMemo, useState } from 'react';
 import { AddTransactionSheet } from '@/components/flows/add-transaction-sheet';
 import { ComingSoon } from '@/components/coming-soon';
 import { BudgetsScreen } from '@/screens/budgets';
+import { DebtsScreen } from '@/screens/debts';
+import { PocketsScreen } from '@/screens/pockets';
 import { HomeScreen } from '@/screens/home';
 import { WeekScreen } from '@/screens/week';
 import { MovementsScreen } from '@/screens/movements';
@@ -28,7 +30,7 @@ export function PreviewApp() {
   const seed = useMemo(() => buildPreviewData(), []);
   const repository = useMemo(() => new MemoryRepository(seed), [seed]);
   const [tab, setTab] = useState<TabId>('home');
-  const [budgets, setBudgets] = useState(false);
+  const [extra, setExtra] = useState<'budgets' | 'pockets' | 'debts' | null>(null);
   const [addOpen, setAddOpen] = useState(false);
 
   return (
@@ -36,21 +38,32 @@ export function PreviewApp() {
       <div className="mx-auto min-h-dvh w-full max-w-lg bg-bg">
         <div className="flex items-center justify-center gap-3 bg-amber-bg px-4 py-1.5 text-[11px] font-semibold text-amber-deep">
           <span>Previsualización · los datos no se guardan</span>
-          <button
-            type="button"
-            onClick={() => setBudgets((value) => !value)}
-            className="rounded-full bg-amber-deep/10 px-2 py-0.5"
-          >
-            {budgets ? 'Volver' : 'Presupuestos'}
-          </button>
+          {(
+            [
+              ['budgets', 'Presup.'],
+              ['pockets', 'Huchas'],
+              ['debts', 'Deuda'],
+            ] as const
+          ).map(([id, label]) => (
+            <button
+              key={id}
+              type="button"
+              onClick={() => setExtra(extra === id ? null : id)}
+              className={`rounded-full px-2 py-0.5 ${extra === id ? 'bg-amber-deep text-amber-bg' : 'bg-amber-deep/10'}`}
+            >
+              {label}
+            </button>
+          ))}
         </div>
 
-        {budgets ? <BudgetsScreen /> : null}
-        {!budgets && tab === 'home' ? <HomeScreen /> : null}
-        {!budgets && tab === 'movements' ? <MovementsScreen /> : null}
-        {!budgets && tab === 'more' ? <MoreScreen /> : null}
-        {!budgets && tab === 'week' ? <WeekScreen /> : null}
-        {!budgets && tab === 'progress' ? (
+        {extra === 'budgets' ? <BudgetsScreen /> : null}
+        {extra === 'pockets' ? <PocketsScreen /> : null}
+        {extra === 'debts' ? <DebtsScreen /> : null}
+        {!extra && tab === 'home' ? <HomeScreen /> : null}
+        {!extra && tab === 'movements' ? <MovementsScreen /> : null}
+        {!extra && tab === 'more' ? <MoreScreen /> : null}
+        {!extra && tab === 'week' ? <WeekScreen /> : null}
+        {!extra && tab === 'progress' ? (
           <ComingSoon
             title="Progreso"
             question="¿Está sirviendo el esfuerzo?"
