@@ -10,7 +10,7 @@ import { TransactionDetailSheet } from '@/components/flows/transaction-detail-sh
 import { BudgetBar } from '@/components/ui/progress';
 import { Avatar, Card, EmptyState, SectionTitle, StatusChip } from '@/components/ui/primitives';
 import { SemillaMark } from '@/components/ui/logo';
-import { statusLabel } from '@/domain/calculations';
+import { paceLabel, statusLabel } from '@/domain/calculations';
 import { isMonthClosable } from '@/domain/closing';
 import { capitalize, formatDayShort, formatRange, monthKeyOf, monthLabel } from '@/domain/dates';
 import { formatCurrency } from '@/domain/money';
@@ -119,14 +119,12 @@ export function HomeScreen() {
                   />
                 </div>
                 <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-2">
-                  <StatusChip status={week.status} className="bg-white/12 text-white">
+                  <StatusChip status={week.status} onDark>
                     {statusLabel(week.status)}
                   </StatusChip>
                   {elapsedRatio > 0.1 ? (
                     <p className="text-[13px] text-white/75 tnum">
-                      {paceVariance >= 0
-                        ? `${formatCurrency(paceVariance)} mejor que el ritmo`
-                        : `${formatCurrency(Math.abs(paceVariance))} por encima del ritmo`}
+                      {paceLabel(week.status, paceVariance)}
                     </p>
                   ) : (
                     <p className="text-[13px] text-white/75">Semana recién empezada</p>

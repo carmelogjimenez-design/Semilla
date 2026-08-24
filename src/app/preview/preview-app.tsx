@@ -37,7 +37,8 @@ export function PreviewApp() {
 
   return (
     <SemillaProvider repository={repository} initialData={seed} currentUserId="preview-carmelo">
-      <div className="mx-auto min-h-dvh w-full max-w-lg bg-bg">
+      <div className="min-h-dvh bg-warm">
+      <div className="mx-auto min-h-dvh w-full max-w-lg bg-bg sm:border-x sm:border-stone-200/70 sm:shadow-[0_0_80px_-30px_rgba(17,19,22,0.35)]">
         <div className="flex items-center justify-center gap-3 bg-amber-bg px-4 py-1.5 text-[11px] font-semibold text-amber-deep">
           <span>Previsualización · los datos no se guardan</span>
           {(
@@ -71,18 +72,20 @@ export function PreviewApp() {
         {!extra && tab === 'week' ? <WeekScreen /> : null}
         {!extra && tab === 'progress' ? <ProgressScreen /> : null}
 
+        {/* Igual que en la app: botón y barra anclados a la columna. */}
+        <div className="pointer-events-none fixed inset-x-0 bottom-0 z-50 mx-auto w-full max-w-lg">
         <button
           type="button"
           onClick={() => setAddOpen(true)}
           aria-label="Añadir movimiento"
-          className="fixed right-5 z-50 flex h-16 w-16 items-center justify-center rounded-full bg-forest text-white shadow-fab"
+          className="pointer-events-auto absolute right-5 z-10 flex h-16 w-16 items-center justify-center rounded-full bg-forest text-white shadow-fab"
           style={{ bottom: 'calc(var(--nav-height) + env(safe-area-inset-bottom) + 14px)' }}
         >
           <Plus size={28} strokeWidth={2.4} />
         </button>
 
         <nav
-          className="fixed inset-x-0 bottom-0 z-40 mx-auto w-full max-w-lg border-t border-stone-200/60 bg-surface/95 backdrop-blur"
+          className="pointer-events-auto border-t border-stone-200/60 bg-surface/95 backdrop-blur sm:border-x sm:border-stone-200/70"
           style={{ paddingBottom: 'env(safe-area-inset-bottom)' }}
         >
           <ul className="flex h-[68px] items-stretch">
@@ -114,8 +117,10 @@ export function PreviewApp() {
             })}
           </ul>
         </nav>
+        </div>
 
         <AddTransactionSheet open={addOpen} onClose={() => setAddOpen(false)} />
+      </div>
       </div>
     </SemillaProvider>
   );

@@ -49,16 +49,29 @@ const STATUS_STYLE: Record<HealthStatus, { chip: string; dot: string }> = {
   neutral: { chip: 'bg-stone-100 text-muted', dot: 'bg-stone-400' },
 };
 
+/* Sobre el verde oscuro del hero, la versión clara del chip se lee fatal: el
+   fondo translúcido y el texto oscuro quedan casi al mismo tono. Por eso hay una
+   variante propia y no un `className` encima, que además no gana por orden. */
+const STATUS_STYLE_DARK: Record<HealthStatus, { chip: string; dot: string }> = {
+  green: { chip: 'bg-white/15 text-white', dot: 'bg-leaf' },
+  amber: { chip: 'bg-white/15 text-amber-bg', dot: 'bg-amber-soft' },
+  red: { chip: 'bg-white/15 text-coral-bg', dot: 'bg-coral' },
+  neutral: { chip: 'bg-white/15 text-white/85', dot: 'bg-white/60' },
+};
+
 export function StatusChip({
   status,
   children,
   className,
+  onDark = false,
 }: {
   status: HealthStatus;
   children: ReactNode;
   className?: string;
+  /** Para fondos oscuros, como el hero de Inicio. */
+  onDark?: boolean;
 }) {
-  const style = STATUS_STYLE[status];
+  const style = onDark ? STATUS_STYLE_DARK[status] : STATUS_STYLE[status];
   return (
     <span
       className={`inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-semibold ${style.chip} ${className ?? ''}`}

@@ -20,7 +20,9 @@ export function ProgressRing({
   size = 128,
   thickness = 12,
   status = 'green',
-  trackClassName = 'stroke-sage',
+  /* Un poco más marcado que SAGE puro: con el anillo casi invisible, una semana
+     sin gastar parecía una tarjeta a medio cargar. */
+  trackClassName = 'stroke-seed-200/80',
   children,
   label,
 }: {

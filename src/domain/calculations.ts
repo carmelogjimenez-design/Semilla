@@ -20,7 +20,7 @@ import type {
   WeeklyBudget,
 } from './types';
 import { isDebtPayment, isExpense, isIncome, isSaving, isTransfer } from './types';
-import { addMoney, ratio, sumBy } from './money';
+import { addMoney, formatCurrency, ratio, sumBy } from './money';
 import {
   addDays,
   daysBetween,
@@ -181,6 +181,19 @@ export function statusLabel(status: HealthStatus): string {
     default:
       return 'Sin presupuesto';
   }
+}
+
+/**
+ * §101 — decir la verdad sin contradecirse: si el semáforo está en verde, ir un
+ * poco por delante del ritmo no se cuenta como un problema. Vive aquí y no en una
+ * pantalla porque Inicio y Semana enseñan el mismo dato y tienen que decir lo
+ * mismo; cuando cada una tenía su frase, una decía «buen ritmo» y la otra «por
+ * encima del ritmo» a la vez.
+ */
+export function paceLabel(status: HealthStatus, variance: Cents): string {
+  if (variance >= 0) return `${formatCurrency(variance)} mejor que el ritmo`;
+  if (status === 'green') return `${formatCurrency(Math.abs(variance))} por delante, dentro del plan`;
+  return `${formatCurrency(Math.abs(variance))} por encima del ritmo`;
 }
 
 /* ------------------------------------------------------------------ *

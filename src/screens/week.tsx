@@ -9,12 +9,12 @@ import { WeekCloseSheet } from '@/components/flows/week-close-sheet';
 import { TransactionRow } from '@/components/transaction-row';
 import { BudgetBar, ProgressRing } from '@/components/ui/progress';
 import { Card, Chip, EmptyState, SectionTitle, StatusChip } from '@/components/ui/primitives';
-import { statusLabel } from '@/domain/calculations';
+import { paceLabel, statusLabel } from '@/domain/calculations';
 import { nextWeekToClose, weekCloseDrafts, type WeekCloseDraft } from '@/domain/closing';
 import { capitalize, formatRange, monthLabel, weekProgress } from '@/domain/dates';
 import { formatCurrency } from '@/domain/money';
 import { buildCategorySpend } from '@/domain/selectors';
-import type { HealthStatus, Transaction } from '@/domain/types';
+import type { Transaction } from '@/domain/types';
 import { useSemilla } from '@/state/semilla-provider';
 
 /**
@@ -211,11 +211,21 @@ export function WeekScreen() {
             <p className="mt-4 text-[13px] text-muted tnum">
               {formatCurrency(week.spent)} de {formatCurrency(week.planned)}
             </p>
+            {/* Sin un solo gasto no hay ritmo que juzgar: decir «vas mejor que el
+                ritmo» cuando no se ha gastado nada suena a halago vacío. */}
             <div className="mt-3 flex flex-wrap items-center justify-center gap-x-3 gap-y-2">
-              <StatusChip status={week.status}>{statusLabel(week.status)}</StatusChip>
-              {elapsedRatio > 0.1 ? (
-                <span className="text-[13px] text-muted tnum">{paceLabel(week.status, paceVariance)}</span>
-              ) : null}
+              {week.spent === 0 ? (
+                <span className="text-[13px] text-muted">Todavía sin gastos esta semana</span>
+              ) : (
+                <>
+                  <StatusChip status={week.status}>{statusLabel(week.status)}</StatusChip>
+                  {elapsedRatio > 0.1 ? (
+                    <span className="text-[13px] text-muted tnum">
+                      {paceLabel(week.status, paceVariance)}
+                    </span>
+                  ) : null}
+                </>
+              )}
             </div>
             {progress.remaining > 0 ? (
               <p className="mt-3 max-w-[30ch] text-center text-[12px] leading-relaxed text-stone-400 tnum">
@@ -402,14 +412,4 @@ function PriorityGroup({
       <p className="text-[14px] leading-relaxed text-ink">{names.join(' · ')}</p>
     </div>
   );
-}
-
-/**
- * §101 — decir la verdad, pero sin contradecirse: si el semáforo está en verde,
- * ir un poco por delante del ritmo no se cuenta como un problema.
- */
-function paceLabel(status: HealthStatus, variance: number): string {
-  if (variance >= 0) return `${formatCurrency(variance)} mejor que el ritmo`;
-  if (status === 'green') return `${formatCurrency(Math.abs(variance))} por delante, dentro del plan`;
-  return `${formatCurrency(Math.abs(variance))} por encima del ritmo`;
 }
