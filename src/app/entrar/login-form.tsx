@@ -21,10 +21,19 @@ export function LoginForm({ next, notice }: { next: string; notice: string | nul
     const supabase = createClient();
     const { error: authError } = await supabase.auth.signInWithPassword({ email: email.trim(), password });
     if (authError) {
+      /* «No confirmado» y «contraseña mal» son problemas distintos y se
+         resuelven de forma distinta: decir sólo «no hemos podido entrar» deja a
+         la persona probando la misma contraseña una y otra vez. */
+      const code = authError.code ?? '';
+      const text = authError.message.toLowerCase();
       setError(
-        authError.message.toLowerCase().includes('invalid')
-          ? 'Correo o contraseña incorrectos.'
-          : 'No hemos podido entrar. Inténtalo otra vez.',
+        code === 'email_not_confirmed' || text.includes('not confirmed')
+          ? 'Todavía no has confirmado el correo. Busca el mensaje de Semilla en tu bandeja.'
+          : code === 'invalid_credentials' || text.includes('invalid')
+            ? 'Correo o contraseña incorrectos.'
+            : text.includes('rate limit')
+              ? 'Demasiados intentos seguidos. Espera un rato.'
+              : `No hemos podido entrar. El servidor dice: ${authError.message}`,
       );
       setLoading(false);
       return;

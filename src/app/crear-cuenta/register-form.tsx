@@ -7,6 +7,41 @@ import { Button, Field, TextInput } from '@/components/ui/primitives';
 import { createClient } from '@/lib/supabase/client';
 import { siteUrl } from '@/lib/env';
 
+/**
+ * Traduce el fallo real de Supabase a algo que se pueda leer y, sobre todo, sobre
+ * lo que se pueda actuar.
+ *
+ * Antes había una sola frase para todo —«no hemos podido crear la cuenta»— y eso
+ * escondía justo el dato que hacía falta para arreglarlo: no es lo mismo haber
+ * agotado el límite de correos que tener el registro cerrado. Cuando el error no
+ * es de los conocidos se enseña tal cual, en pequeño: prefiero un mensaje feo a
+ * un callejón sin salida.
+ */
+function explainAuthError(error: { message: string; code?: string | undefined }): string {
+  const code = error.code ?? '';
+  const text = error.message.toLowerCase();
+
+  if (code === 'user_already_exists' || text.includes('already registered') || text.includes('already')) {
+    return 'Ese correo ya tiene cuenta. Entra con él desde el enlace de abajo.';
+  }
+  if (code === 'over_email_send_rate_limit' || text.includes('rate limit')) {
+    return 'Se han enviado demasiados correos seguidos. Espera un rato y vuelve a intentarlo.';
+  }
+  if (code === 'signup_disabled' || text.includes('signups not allowed')) {
+    return 'El registro está cerrado en este momento.';
+  }
+  if (code === 'weak_password' || text.includes('password')) {
+    return 'Esa contraseña no vale. Prueba con una más larga.';
+  }
+  if (code === 'email_address_invalid' || text.includes('invalid format')) {
+    return 'Ese correo no tiene una forma válida.';
+  }
+  if (text.includes('database error')) {
+    return 'La base de datos ha rechazado el alta. Avisa a quien te invitó: es un fallo de configuración, no tuyo.';
+  }
+  return `No hemos podido crear la cuenta. El servidor dice: ${error.message}`;
+}
+
 export function RegisterForm({
   inviteToken,
   presetEmail,
@@ -43,11 +78,7 @@ export function RegisterForm({
     });
 
     if (authError) {
-      setError(
-        authError.message.toLowerCase().includes('already')
-          ? 'Ese correo ya tiene cuenta. Entra con él.'
-          : 'No hemos podido crear la cuenta. Inténtalo otra vez.',
-      );
+      setError(explainAuthError(authError));
       setLoading(false);
       return;
     }
