@@ -28,8 +28,8 @@ Semilla se construye **por fases**, y cada fase se despliega.
 
 | Fase | Nombre | Contenido | Estado |
 |------|--------|-----------|--------|
-| **1** | Late y respira | Migraciones, RLS, auth, hogar, invitaciones, Home, Movimientos, alta de los 5 tipos de movimiento | ✅ **esta entrega** |
-| 2 | Presupuesto | Pantalla Semana, presupuestos mensual y semanal flexibles, límites por categoría | ⏳ |
+| **1** | Late y respira | Migraciones, RLS, auth, hogar, invitaciones, Home, Movimientos, alta de los 5 tipos de movimiento | ✅ |
+| **2** | Presupuesto | Pantalla Semana, presupuestos mensual y semanal flexibles, límites por categoría, prioridades | ✅ **esta entrega** |
 | 3 | Lo que crece | Huchas, deuda, amortizaciones, gráfico de deuda | ⏳ |
 | 4 | Progreso | Objetivos, proyecciones, logros, rachas, patrimonio | ⏳ |
 | 5 | Ritmo | Cierre de semana y de mes, histórico, comparativas, insights | ⏳ |

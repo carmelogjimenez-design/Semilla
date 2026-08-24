@@ -34,7 +34,6 @@ import { useSemilla } from '@/state/semilla-provider';
 const UPCOMING = [
   { icon: PiggyBank, label: 'Huchas', phase: 'Fase 3' },
   { icon: Flame, label: 'Deudas', phase: 'Fase 3' },
-  { icon: Sliders, label: 'Presupuestos', phase: 'Fase 2' },
   { icon: Repeat, label: 'Gastos fijos', phase: 'Fase 6' },
   { icon: Target, label: 'Objetivos', phase: 'Fase 4' },
   { icon: Award, label: 'Logros', phase: 'Fase 4' },
@@ -134,6 +133,25 @@ export function MoreScreen() {
               <Users size={18} /> Invitar miembro
             </Button>
           ) : null}
+        </Card>
+      </section>
+
+      {/* Ya disponible */}
+      <section className="mt-6">
+        <SectionTitle>Vuestro plan</SectionTitle>
+        <Card className="px-2 py-1">
+          <Link href="/mas/presupuestos" className="block">
+            <div className="flex items-center gap-3 px-2 py-3.5">
+              <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-sage">
+                <Sliders size={18} className="text-seed-700" aria-hidden />
+              </span>
+              <span className="flex-1">
+                <span className="block text-[15px] font-medium text-ink">Presupuestos</span>
+                <span className="block text-[13px] text-muted">Mes, semanas y límites por categoría</span>
+              </span>
+              <ChevronRight size={18} className="text-stone-400" />
+            </div>
+          </Link>
         </Card>
       </section>
 

@@ -49,5 +49,7 @@ describe('semanas del mes', () => {
   it('formatea rangos como los diría una persona', () => {
     expect(formatRange('2026-09-14', '2026-09-20')).toBe('14–20 septiembre');
     expect(formatRange('2026-09-28', '2026-10-04')).toBe('28 septiembre – 4 octubre');
+    // Una semana de un solo día no debe leerse «31–31 agosto».
+    expect(formatRange('2026-08-31', '2026-08-31')).toBe('31 agosto');
   });
 });

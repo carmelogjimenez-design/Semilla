@@ -5,7 +5,9 @@ import { useMemo, useState } from 'react';
 
 import { AddTransactionSheet } from '@/components/flows/add-transaction-sheet';
 import { ComingSoon } from '@/components/coming-soon';
+import { BudgetsScreen } from '@/screens/budgets';
 import { HomeScreen } from '@/screens/home';
+import { WeekScreen } from '@/screens/week';
 import { MovementsScreen } from '@/screens/movements';
 import { MoreScreen } from '@/screens/more';
 import { MemoryRepository } from '@/preview/memory-repository';
@@ -26,31 +28,29 @@ export function PreviewApp() {
   const seed = useMemo(() => buildPreviewData(), []);
   const repository = useMemo(() => new MemoryRepository(seed), [seed]);
   const [tab, setTab] = useState<TabId>('home');
+  const [budgets, setBudgets] = useState(false);
   const [addOpen, setAddOpen] = useState(false);
 
   return (
     <SemillaProvider repository={repository} initialData={seed} currentUserId="preview-carmelo">
       <div className="mx-auto min-h-dvh w-full max-w-lg bg-bg">
-        <div className="bg-amber-bg px-4 py-1.5 text-center text-[11px] font-semibold text-amber-deep">
-          Previsualización de interfaz · los datos no se guardan
+        <div className="flex items-center justify-center gap-3 bg-amber-bg px-4 py-1.5 text-[11px] font-semibold text-amber-deep">
+          <span>Previsualización · los datos no se guardan</span>
+          <button
+            type="button"
+            onClick={() => setBudgets((value) => !value)}
+            className="rounded-full bg-amber-deep/10 px-2 py-0.5"
+          >
+            {budgets ? 'Volver' : 'Presupuestos'}
+          </button>
         </div>
 
-        {tab === 'home' ? <HomeScreen /> : null}
-        {tab === 'movements' ? <MovementsScreen /> : null}
-        {tab === 'more' ? <MoreScreen /> : null}
-        {tab === 'week' ? (
-          <ComingSoon
-            title="Semana"
-            question="¿Cuánto podemos gastar?"
-            phase="Fase 2 · Presupuesto"
-            bullets={[
-              'Presupuesto semanal propio para cada semana, incluidas las parciales',
-              'Reparto por categorías con anillos y barras, sin tablas',
-              'Semáforo con criterio: nunca rojo por pasarse un poco',
-            ]}
-          />
-        ) : null}
-        {tab === 'progress' ? (
+        {budgets ? <BudgetsScreen /> : null}
+        {!budgets && tab === 'home' ? <HomeScreen /> : null}
+        {!budgets && tab === 'movements' ? <MovementsScreen /> : null}
+        {!budgets && tab === 'more' ? <MoreScreen /> : null}
+        {!budgets && tab === 'week' ? <WeekScreen /> : null}
+        {!budgets && tab === 'progress' ? (
           <ComingSoon
             title="Progreso"
             question="¿Está sirviendo el esfuerzo?"

@@ -206,6 +206,7 @@ export function formatWeekday(iso: ISODate): string {
 
 /** "14–20 septiembre" · "28 septiembre – 4 octubre" */
 export function formatRange(start: ISODate, end: ISODate): string {
+  if (start === end) return formatDayLong(start);
   const a = fromISO(start);
   const b = fromISO(end);
   if (a.getUTCMonth() === b.getUTCMonth()) {
