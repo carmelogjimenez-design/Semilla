@@ -27,6 +27,7 @@ import type {
   Merchant,
   MonthKey,
   MonthlyClose,
+  PaymentMethod,
   PlannedItem,
   QuickAction,
   SavingsPocket,
@@ -54,6 +55,7 @@ export interface SemillaActions {
 
   saveAccount(account: Account): Promise<void>;
   deleteAccount(id: ID): Promise<void>;
+  savePaymentMethod(method: PaymentMethod): Promise<void>;
 
   saveCategory(category: Category): Promise<void>;
   deleteCategory(id: ID): Promise<void>;
@@ -310,6 +312,14 @@ export function SemillaProvider({ repository, initialData, currentUserId, childr
         await run(
           patch((current) => ({ accounts: current.accounts.filter((a) => a.id !== id) })),
           async () => repository.deleteAccount(id),
+        );
+      },
+
+      async savePaymentMethod(method) {
+        await run(
+          patch((current) => ({ paymentMethods: upsertById(current.paymentMethods, method) })),
+          async () => repository.savePaymentMethod(method),
+          { title: 'Medio de pago guardado' },
         );
       },
 

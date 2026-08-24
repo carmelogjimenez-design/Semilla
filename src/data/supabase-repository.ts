@@ -11,6 +11,7 @@ import type {
   Merchant,
   MonthKey,
   MonthlyClose,
+  PaymentMethod,
   PlannedItem,
   QuickAction,
   SavingsPocket,
@@ -274,6 +275,21 @@ export class SupabaseRepository implements SemillaRepository {
       'No hemos podido guardar la cuenta',
     );
     return toAccount(row);
+  }
+
+  async savePaymentMethod(method: PaymentMethod): Promise<void> {
+    check(
+      await this.supabase.from('payment_methods').upsert({
+        id: method.id,
+        household_id: method.householdId,
+        name: method.name,
+        type: method.type,
+        account_id: method.accountId,
+        position: method.position,
+        archived: method.archived,
+      }),
+      'No hemos podido guardar el medio de pago',
+    );
   }
 
   async deleteAccount(id: ID): Promise<void> {

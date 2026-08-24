@@ -1,10 +1,16 @@
 import type { SemillaRepository } from '@/data/repository';
 import type {
+  Account,
+  Category,
   FinancialGoal,
+  HouseholdSettings,
+  Subcategory,
+  Tag,
   HouseholdData,
   ID,
   Merchant,
   MonthlyClose,
+  PaymentMethod,
   PlannedItem,
   Transaction,
   WeeklyClose,
@@ -71,17 +77,65 @@ export class MemoryRepository implements SemillaRepository {
     return merchant;
   }
 
-  /* El resto de operaciones no se ejercitan en la previsualización. */
-  async saveAccount(account: never): Promise<never> {
+  async saveAccount(account: Account): Promise<Account> {
+    this.data = { ...this.data, accounts: upsert(this.data.accounts, account) };
+    this.notify();
     return account;
   }
-  async deleteAccount(): Promise<void> {}
-  async saveCategory(): Promise<void> {}
-  async deleteCategory(): Promise<void> {}
-  async saveSubcategory(): Promise<void> {}
-  async deleteSubcategory(): Promise<void> {}
-  async saveTag(): Promise<void> {}
-  async deleteTag(): Promise<void> {}
+  async deleteAccount(id: ID): Promise<void> {
+    this.data = { ...this.data, accounts: this.data.accounts.filter((a) => a.id !== id) };
+    this.notify();
+  }
+  async savePaymentMethod(method: PaymentMethod): Promise<void> {
+    this.data = { ...this.data, paymentMethods: upsert(this.data.paymentMethods, method) };
+    this.notify();
+  }
+  async saveCategory(category: Category): Promise<void> {
+    /* Las subcategorías viven en su propia tabla: al guardar la categoría no se
+       pierden las que ya tenía. */
+    const previous = this.data.categories.find((entry) => entry.id === category.id);
+    this.data = {
+      ...this.data,
+      categories: upsert(this.data.categories, {
+        ...category,
+        subcategories: previous?.subcategories ?? category.subcategories,
+      }),
+    };
+    this.notify();
+  }
+  async deleteCategory(id: ID): Promise<void> {
+    this.data = { ...this.data, categories: this.data.categories.filter((c) => c.id !== id) };
+    this.notify();
+  }
+  async saveSubcategory(subcategory: Subcategory): Promise<void> {
+    this.data = {
+      ...this.data,
+      categories: this.data.categories.map((category) =>
+        category.id === subcategory.categoryId
+          ? { ...category, subcategories: upsert(category.subcategories, subcategory) }
+          : category,
+      ),
+    };
+    this.notify();
+  }
+  async deleteSubcategory(id: ID): Promise<void> {
+    this.data = {
+      ...this.data,
+      categories: this.data.categories.map((category) => ({
+        ...category,
+        subcategories: category.subcategories.filter((sub) => sub.id !== id),
+      })),
+    };
+    this.notify();
+  }
+  async saveTag(tag: Tag): Promise<void> {
+    this.data = { ...this.data, tags: upsert(this.data.tags, tag) };
+    this.notify();
+  }
+  async deleteTag(id: ID): Promise<void> {
+    this.data = { ...this.data, tags: this.data.tags.filter((t) => t.id !== id) };
+    this.notify();
+  }
   async saveIncomeSource(): Promise<void> {}
   async deleteIncomeSource(): Promise<void> {}
   async savePocket(): Promise<void> {}
@@ -135,9 +189,21 @@ export class MemoryRepository implements SemillaRepository {
   async unlockAchievements(): Promise<void> {}
   async saveQuickAction(): Promise<void> {}
   async deleteQuickAction(): Promise<void> {}
-  async renameHousehold(): Promise<void> {}
-  async updateMemberName(): Promise<void> {}
-  async updateSettings(): Promise<void> {}
+  async renameHousehold(_householdId: ID, name: string): Promise<void> {
+    this.data = { ...this.data, household: { ...this.data.household, name } };
+    this.notify();
+  }
+  async updateMemberName(memberId: ID, name: string): Promise<void> {
+    this.data = {
+      ...this.data,
+      members: this.data.members.map((m) => (m.id === memberId ? { ...m, name } : m)),
+    };
+    this.notify();
+  }
+  async updateSettings(_householdId: ID, patch: Partial<HouseholdSettings>): Promise<void> {
+    this.data = { ...this.data, settings: { ...this.data.settings, ...patch } };
+    this.notify();
+  }
   async createInvite(): Promise<never> {
     throw new Error('Las invitaciones necesitan Supabase.');
   }

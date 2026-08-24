@@ -7,7 +7,10 @@ import { AddTransactionSheet } from '@/components/flows/add-transaction-sheet';
 import { BudgetsScreen } from '@/screens/budgets';
 import { AchievementsScreen } from '@/screens/achievements';
 import { DebtsScreen } from '@/screens/debts';
+import { AccountsScreen } from '@/screens/accounts';
+import { CatalogScreen } from '@/screens/catalog';
 import { CommittedScreen } from '@/screens/committed';
+import { SettingsScreen } from '@/screens/settings';
 import { HistoryScreen } from '@/screens/history';
 import { ProgressScreen } from '@/screens/progress';
 import { PocketsScreen } from '@/screens/pockets';
@@ -33,14 +36,14 @@ export function PreviewApp() {
   const seed = useMemo(() => buildPreviewData(), []);
   const repository = useMemo(() => new MemoryRepository(seed), [seed]);
   const [tab, setTab] = useState<TabId>('home');
-  const [extra, setExtra] = useState<'budgets' | 'pockets' | 'debts' | 'awards' | 'history' | 'committed' | null>(null);
+  const [extra, setExtra] = useState<'budgets' | 'pockets' | 'debts' | 'awards' | 'history' | 'committed' | 'catalog' | 'accounts' | 'settings' | null>(null);
   const [addOpen, setAddOpen] = useState(false);
 
   return (
     <SemillaProvider repository={repository} initialData={seed} currentUserId="preview-carmelo">
       <div className="min-h-dvh bg-warm">
       <div className="mx-auto min-h-dvh w-full max-w-lg bg-bg sm:border-x sm:border-stone-200/70 sm:shadow-[0_0_80px_-30px_rgba(17,19,22,0.35)]">
-        <div className="flex items-center justify-center gap-3 bg-amber-bg px-4 py-1.5 text-[11px] font-semibold text-amber-deep">
+        <div className="flex items-center gap-2 overflow-x-auto whitespace-nowrap bg-amber-bg px-4 py-1.5 text-[11px] font-semibold text-amber-deep">
           <span>Previsualización · los datos no se guardan</span>
           {(
             [
@@ -50,6 +53,9 @@ export function PreviewApp() {
               ['awards', 'Logros'],
               ['history', 'Histórico'],
               ['committed', 'Fijos'],
+              ['catalog', 'Categ.'],
+              ['accounts', 'Cuentas'],
+              ['settings', 'Ajustes'],
             ] as const
           ).map(([id, label]) => (
             <button
@@ -69,6 +75,9 @@ export function PreviewApp() {
         {extra === 'awards' ? <AchievementsScreen /> : null}
         {extra === 'history' ? <HistoryScreen /> : null}
         {extra === 'committed' ? <CommittedScreen /> : null}
+        {extra === 'catalog' ? <CatalogScreen /> : null}
+        {extra === 'accounts' ? <AccountsScreen /> : null}
+        {extra === 'settings' ? <SettingsScreen /> : null}
         {!extra && tab === 'home' ? <HomeScreen /> : null}
         {!extra && tab === 'movements' ? <MovementsScreen /> : null}
         {!extra && tab === 'more' ? <MoreScreen /> : null}

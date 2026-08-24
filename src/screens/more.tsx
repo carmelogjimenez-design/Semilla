@@ -14,6 +14,7 @@ import {
   Repeat,
   ShieldCheck,
   Sliders,
+  Smartphone,
   Tag,
   Users,
 } from 'lucide-react';
@@ -38,12 +39,13 @@ const AVAILABLE = [
   { href: '/mas/logros', icon: Award, label: 'Logros', hint: 'Lo que ya habéis conseguido' },
   { href: '/mas/historico', icon: History, label: 'Histórico', hint: 'Cierres, comparativas y meses anteriores' },
   { href: '/mas/fijos', icon: Repeat, label: 'Comprometido', hint: 'Gastos fijos, calendario de pagos y extraordinarios' },
+  { href: '/mas/categorias', icon: Tag, label: 'Categorías y etiquetas', hint: 'El vocabulario de la casa' },
+  { href: '/mas/cuentas', icon: CreditCard, label: 'Cuentas', hint: 'Saldos, medios de pago' },
+  { href: '/mas/ajustes', icon: DatabaseBackup, label: 'Ajustes y copia', hint: 'Nombres, copia de seguridad y privacidad' },
 ] as const;
 
 const UPCOMING = [
-  { icon: Tag, label: 'Categorías y etiquetas', phase: 'Fase 7' },
-  { icon: CreditCard, label: 'Cuentas', phase: 'Fase 7' },
-  { icon: DatabaseBackup, label: 'Copia de seguridad', phase: 'Fase 7' },
+  { icon: Smartphone, label: 'Instalar en el móvil', phase: 'Fase 8' },
 ] as const;
 
 export function MoreScreen() {

@@ -9,6 +9,7 @@ import type {
   Merchant,
   MonthKey,
   MonthlyClose,
+  PaymentMethod,
   PlannedItem,
   QuickAction,
   SavingsPocket,
@@ -36,6 +37,8 @@ export interface SemillaRepository {
 
   saveAccount(account: Account): Promise<Account>;
   deleteAccount(id: ID): Promise<void>;
+
+  savePaymentMethod(method: PaymentMethod): Promise<void>;
 
   saveCategory(category: Omit<Category, 'subcategories'>): Promise<void>;
   deleteCategory(id: ID): Promise<void>;
