@@ -473,6 +473,15 @@ export interface Database {
           expired: boolean;
         }[];
       };
+      my_pending_invites: {
+        Args: Record<string, never>;
+        Returns: {
+          token: string;
+          household_name: string;
+          email: string;
+          expires_at: string;
+        }[];
+      };
       is_household_member: { Args: { hid: string }; Returns: boolean };
       is_household_owner: { Args: { hid: string }; Returns: boolean };
     };

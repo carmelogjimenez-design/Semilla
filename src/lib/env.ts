@@ -84,9 +84,23 @@ export function isPreviewEnabled(): boolean {
 
 /**
  * URL pública del despliegue, para los enlaces de correo de Supabase.
- * Prioridad: variable explícita → dominio de Vercel → localhost.
+ *
+ * En el navegador manda SIEMPRE el origen real de la pestaña. Quien pide el
+ * correo está mirando la web: la dirección que tiene delante es, por definición,
+ * la buena, y no depende de que nadie haya configurado nada.
+ *
+ * Esto no es un adorno. `VERCEL_URL` sólo existe en el servidor —no lleva el
+ * prefijo NEXT_PUBLIC_, así que no se incrusta en el paquete del navegador—, de
+ * modo que sin esta primera línea y sin `NEXT_PUBLIC_SITE_URL` puesta a mano,
+ * los correos de confirmación salían apuntando a `http://localhost:3000`.
+ * Supabase los rechaza por no estar en su lista, se cae al Site URL y por el
+ * camino se pierde el `siguiente`: quien venía a aceptar una invitación acababa
+ * en la portada creando un hogar nuevo.
  */
 export function siteUrl(): string {
+  if (typeof window !== 'undefined' && window.location?.origin) {
+    return window.location.origin.replace(/\/+$/, '');
+  }
   const explicit = clean(process.env.NEXT_PUBLIC_SITE_URL);
   if (explicit) return explicit.replace(/\/+$/, '');
   const vercel = clean(process.env.NEXT_PUBLIC_VERCEL_URL) || clean(process.env.VERCEL_URL);
