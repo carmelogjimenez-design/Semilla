@@ -446,12 +446,26 @@ export function calculateNetCashflow(transactions: readonly Transaction[]): Cent
 
 export interface NetWorth {
   accounts: Cents;
-  pocketsOutsideAccounts: Cents;
+  /** Informativo: cuánto del saldo está etiquetado en huchas. NO se suma. */
+  labelledInPockets: Cents;
   debt: Cents;
   total: Cents;
 }
 
-/** §36 — patrimonio conceptual. Sin valor de vivienda en el MVP. */
+/**
+ * §36 — Patrimonio: lo que hay menos lo que se debe.
+ *
+ * Las huchas NO se suman aparte. Una hucha es una etiqueta sobre dinero que ya
+ * está en una cuenta, no un contenedor adicional: guardar 300 € en el fondo de
+ * emergencia no crea 300 € nuevos, sólo los aparta mentalmente. Sumarlas sería
+ * contar el mismo dinero dos veces.
+ *
+ * Por lo mismo, amortizar deuda no aumenta el patrimonio: baja la deuda y baja
+ * el saldo en la misma cantidad. Lo que hace crecer el patrimonio es gastar
+ * menos de lo que entra.
+ *
+ * La vivienda queda fuera a propósito: no es dinero disponible.
+ */
 export function calculateNetWorth(input: {
   accounts: readonly Account[];
   pockets: readonly SavingsPocket[];
@@ -460,16 +474,16 @@ export function calculateNetWorth(input: {
   today: ISODate;
 }): NetWorth {
   const accountsTotal = calculateAccountsTotal(input.accounts, input.transactions, input.today, false);
-  const outside = sumBy(
-    input.pockets.filter((p) => !p.archived && p.accountId === null),
+  const labelled = sumBy(
+    input.pockets.filter((p) => !p.archived),
     (p) => pocketBalance(p, input.transactions),
   );
   const debt = calculateDebtTotal(input.debts, input.transactions);
   return {
     accounts: accountsTotal,
-    pocketsOutsideAccounts: outside,
+    labelledInPockets: labelled,
     debt,
-    total: accountsTotal + outside - debt,
+    total: accountsTotal - debt,
   };
 }
 

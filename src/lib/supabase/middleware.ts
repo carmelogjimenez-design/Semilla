@@ -33,7 +33,11 @@ export async function updateSession(request: NextRequest): Promise<NextResponse>
   const { pathname } = request.nextUrl;
 
   if (!isSupabaseConfigured()) {
-    if (pathname === '/configurar') return NextResponse.next({ request });
+    // La previsualización no toca Supabase (usa datos en memoria), así que puede
+    // verse aunque falten las claves. Sólo existe si NEXT_PUBLIC_SEMILLA_PREVIEW=1.
+    if (pathname === '/configurar' || pathname.startsWith('/preview')) {
+      return NextResponse.next({ request });
+    }
     const url = request.nextUrl.clone();
     url.pathname = '/configurar';
     url.search = '';

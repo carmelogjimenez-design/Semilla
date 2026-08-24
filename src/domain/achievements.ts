@@ -78,7 +78,7 @@ export const ACHIEVEMENTS: AchievementDefinition[] = [
     description: 'Habéis llegado al objetivo de una hucha.',
     measure: (c) => ({
       progress: ratio(c.pocketsCompleted, 1),
-      detail: c.pocketsCompleted > 0 ? `${c.pocketsCompleted} completadas` : 'Ninguna todavía',
+      detail: c.pocketsCompleted > 0 ? `${c.pocketsCompleted} completadas` : 'Aún ninguna',
     }),
   },
   {

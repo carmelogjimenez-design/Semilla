@@ -14,7 +14,6 @@ import {
   ShieldCheck,
   Sliders,
   Tag,
-  Target,
   Users,
 } from 'lucide-react';
 import { useState } from 'react';
@@ -35,12 +34,11 @@ const AVAILABLE = [
   { href: '/mas/presupuestos', icon: Sliders, label: 'Presupuestos', hint: 'Mes, semanas y límites por categoría' },
   { href: '/mas/huchas', icon: PiggyBank, label: 'Huchas', hint: 'Ahorro y dinero reservado' },
   { href: '/mas/deudas', icon: Flame, label: 'Deuda', hint: 'Saldos, cuotas y amortizaciones' },
+  { href: '/mas/logros', icon: Award, label: 'Logros', hint: 'Lo que ya habéis conseguido' },
 ] as const;
 
 const UPCOMING = [
   { icon: Repeat, label: 'Gastos fijos', phase: 'Fase 6' },
-  { icon: Target, label: 'Objetivos', phase: 'Fase 4' },
-  { icon: Award, label: 'Logros', phase: 'Fase 4' },
   { icon: Tag, label: 'Categorías y etiquetas', phase: 'Fase 7' },
   { icon: CreditCard, label: 'Cuentas', phase: 'Fase 7' },
   { icon: DatabaseBackup, label: 'Copia de seguridad', phase: 'Fase 7' },

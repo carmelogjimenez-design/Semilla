@@ -4,9 +4,10 @@ import { CalendarRange, Home, LayoutGrid, Plus, Sprout, WalletMinimal } from 'lu
 import { useMemo, useState } from 'react';
 
 import { AddTransactionSheet } from '@/components/flows/add-transaction-sheet';
-import { ComingSoon } from '@/components/coming-soon';
 import { BudgetsScreen } from '@/screens/budgets';
+import { AchievementsScreen } from '@/screens/achievements';
 import { DebtsScreen } from '@/screens/debts';
+import { ProgressScreen } from '@/screens/progress';
 import { PocketsScreen } from '@/screens/pockets';
 import { HomeScreen } from '@/screens/home';
 import { WeekScreen } from '@/screens/week';
@@ -30,7 +31,7 @@ export function PreviewApp() {
   const seed = useMemo(() => buildPreviewData(), []);
   const repository = useMemo(() => new MemoryRepository(seed), [seed]);
   const [tab, setTab] = useState<TabId>('home');
-  const [extra, setExtra] = useState<'budgets' | 'pockets' | 'debts' | null>(null);
+  const [extra, setExtra] = useState<'budgets' | 'pockets' | 'debts' | 'awards' | null>(null);
   const [addOpen, setAddOpen] = useState(false);
 
   return (
@@ -43,6 +44,7 @@ export function PreviewApp() {
               ['budgets', 'Presup.'],
               ['pockets', 'Huchas'],
               ['debts', 'Deuda'],
+              ['awards', 'Logros'],
             ] as const
           ).map(([id, label]) => (
             <button
@@ -59,22 +61,12 @@ export function PreviewApp() {
         {extra === 'budgets' ? <BudgetsScreen /> : null}
         {extra === 'pockets' ? <PocketsScreen /> : null}
         {extra === 'debts' ? <DebtsScreen /> : null}
+        {extra === 'awards' ? <AchievementsScreen /> : null}
         {!extra && tab === 'home' ? <HomeScreen /> : null}
         {!extra && tab === 'movements' ? <MovementsScreen /> : null}
         {!extra && tab === 'more' ? <MoreScreen /> : null}
         {!extra && tab === 'week' ? <WeekScreen /> : null}
-        {!extra && tab === 'progress' ? (
-          <ComingSoon
-            title="Progreso"
-            question="¿Está sirviendo el esfuerzo?"
-            phase="Fase 4 · Progreso"
-            bullets={[
-              'Lo que está creciendo: ahorro, deuda reducida y margen',
-              'Objetivos con fecha y proyecciones a ritmo actual',
-              'Logros del hogar y rachas sin castigo',
-            ]}
-          />
-        ) : null}
+        {!extra && tab === 'progress' ? <ProgressScreen /> : null}
 
         <button
           type="button"

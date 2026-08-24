@@ -198,6 +198,11 @@ export function formatDayLong(iso: ISODate): string {
   return `${date.getUTCDate()} ${MONTH_NAMES[date.getUTCMonth()]}`;
 }
 
+/** "23 agosto 2026" — para periodos que cruzan de año y necesitan decir cuál. */
+export function formatDayFull(iso: ISODate): string {
+  return `${formatDayLong(iso)} ${fromISO(iso).getUTCFullYear()}`;
+}
+
 /** "domingo 23" */
 export function formatWeekday(iso: ISODate): string {
   const date = fromISO(iso);
