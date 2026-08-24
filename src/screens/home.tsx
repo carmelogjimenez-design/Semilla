@@ -3,7 +3,7 @@
 import Link from 'next/link';
 import { motion } from 'framer-motion';
 import { ChevronRight, Info } from 'lucide-react';
-import { useState } from 'react';
+import { useMemo, useState } from 'react';
 
 import { TransactionRow } from '@/components/transaction-row';
 import { TransactionDetailSheet } from '@/components/flows/transaction-detail-sheet';
@@ -11,7 +11,8 @@ import { BudgetBar } from '@/components/ui/progress';
 import { Avatar, Card, EmptyState, SectionTitle, StatusChip } from '@/components/ui/primitives';
 import { SemillaMark } from '@/components/ui/logo';
 import { statusLabel } from '@/domain/calculations';
-import { capitalize, formatDayShort, formatRange, monthLabel } from '@/domain/dates';
+import { isMonthClosable } from '@/domain/closing';
+import { capitalize, formatDayShort, formatRange, monthKeyOf, monthLabel } from '@/domain/dates';
 import { formatCurrency } from '@/domain/money';
 import type { Transaction } from '@/domain/types';
 import { useSemilla } from '@/state/semilla-provider';
@@ -43,6 +44,17 @@ export function HomeScreen() {
   /* Comparar contra el ritmo esperado a estas alturas de la semana, no contra el total. */
   const paceVariance = week ? Math.round(week.planned * elapsedRatio) - week.spent : 0;
   const next = view.upcoming.items[0] ?? null;
+
+  /* El mes anterior sólo se recuerda si terminó, tuvo movimientos y sigue abierto. */
+  const monthToClose = useMemo(() => {
+    const previous = view.previousMonth;
+    if (!isMonthClosable(previous, today)) return null;
+    const hasActivity = data.transactions.some((t) => monthKeyOf(t.date) === previous);
+    const alreadyClosed = data.monthlyCloses.some(
+      (close) => close.month === previous && close.reopenedAt === null,
+    );
+    return hasActivity && !alreadyClosed ? previous : null;
+  }, [view.previousMonth, today, data.transactions, data.monthlyCloses]);
 
   return (
     <div className="px-5 pb-nav pt-safe">
@@ -166,6 +178,28 @@ export function HomeScreen() {
           ) : null}
         </Card>
       </section>
+
+      {/* CIERRE DE MES PENDIENTE (§32) — un recordatorio, no una alarma */}
+      {monthToClose ? (
+        <section className="mt-4">
+          <Link href="/mas/historico" className="block">
+            <Card className="flex items-center gap-3">
+              <span className="flex h-11 w-11 shrink-0 items-center justify-center rounded-2xl bg-sage text-lg" aria-hidden>
+                📗
+              </span>
+              <span className="min-w-0 flex-1">
+                <span className="block text-[15px] font-medium text-ink">
+                  {capitalize(monthLabel(monthToClose))} ya terminó
+                </span>
+                <span className="block text-[13px] text-muted">
+                  Cerradlo y queda guardado cómo fue
+                </span>
+              </span>
+              <ChevronRight size={18} className="shrink-0 text-stone-400" />
+            </Card>
+          </Link>
+        </section>
+      ) : null}
 
       {/* ESTÁ CRECIENDO (§33) */}
       <section className="mt-4">

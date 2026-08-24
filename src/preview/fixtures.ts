@@ -100,6 +100,27 @@ export function buildPreviewData(): HouseholdData {
     ...stamp,
   });
 
+  const incomeOn = (id: string, when: string, amount: number, description: string, source: string, owner: string): Transaction => ({
+    id,
+    householdId: HOUSEHOLD,
+    kind: 'income',
+    amount,
+    date: when,
+    description,
+    note: '',
+    accountId: 'acc-main',
+    paymentMethodId: 'pm-account',
+    ownerUserId: owner,
+    createdByUserId: owner,
+    updatedByUserId: null,
+    plannedId: null,
+    tagIds: [],
+    sourceId: source,
+    recurrence: 'recurring',
+    expectedAmount: null,
+    ...stamp,
+  });
+
   const allTransactions: Transaction[] = [
     {
       id: 'inc-1',
@@ -174,6 +195,17 @@ export function buildPreviewData(): HouseholdData {
     expenseOn('exp-11', back(10), 8000, 'Cuidadora', 'cat-help', 'cat-help-1', SARA),
     expenseOn('exp-12', back(11), 12000, 'Fisio', 'cat-health', 'cat-health-1', CARMELO, true),
     expenseOn('exp-13', back(12), 38000, 'Seguro hogar', 'cat-insurance', 'cat-insurance-0', CARMELO, true),
+
+    /* Mes anterior: sin él, el histórico no tendría con qué comparar y la pantalla
+       enseñaría un único mes suelto. */
+    incomeOn('prev-inc-1', addDays(start, -30), 541600, 'Nómina', 'src-carmelo', CARMELO),
+    incomeOn('prev-inc-2', addDays(start, -30), 185000, 'Nómina', 'src-sara', SARA),
+    expenseOn('prev-1', addDays(start, -28), 66500, 'Colegio', 'cat-kids', 'cat-kids-0', CARMELO),
+    expenseOn('prev-2', addDays(start, -25), 41200, 'Mercadona', 'cat-food', 'cat-food-0', SARA),
+    expenseOn('prev-3', addDays(start, -22), 18900, 'Repsol', 'cat-transport', 'cat-transport-0', CARMELO),
+    expenseOn('prev-4', addDays(start, -18), 9800, 'Restaurante', 'cat-fun', 'cat-fun-0', SARA, false, false),
+    expenseOn('prev-5', addDays(start, -12), 14000, 'Cuidadora', 'cat-help', 'cat-help-1', SARA),
+    expenseOn('prev-6', addDays(start, -6), 7300, 'Farmacia', 'cat-health', 'cat-health-0', CARMELO),
     {
       id: 'sav-1',
       householdId: HOUSEHOLD,
@@ -560,7 +592,34 @@ export function buildPreviewData(): HouseholdData {
       { id: 'first-seed', unlockedAt: nowISO() },
       { id: 'first-pocket', unlockedAt: nowISO() },
     ],
-    weeklyCloses: [],
+    /* Una semana ya cerrada, para poder revisar el histórico y el aviso de cierre
+       de la semana siguiente sin tener que cerrarla a mano en cada recarga. */
+    weeklyCloses: weeks[0]
+      ? [
+          {
+            id: 'close-w1',
+            householdId: HOUSEHOLD,
+            month,
+            weekIndex: weeks[0].index,
+            start: weeks[0].start,
+            end: weeks[0].end,
+            planned: 25000,
+            spent: 21340,
+            margin: 3660,
+            green: true,
+            allocation: {
+              type: 'save' as const,
+              savingCents: 3660,
+              debtCents: 0,
+              pocketId: 'pocket-emergency',
+              debtId: null,
+            },
+            closedBy: CARMELO,
+            closedAt: nowISO(),
+            ...stamp,
+          },
+        ]
+      : [],
     monthlyCloses: [],
     quickActions: [],
     invites: [],

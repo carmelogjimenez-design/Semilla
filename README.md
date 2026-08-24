@@ -30,9 +30,9 @@ Semilla se construye **por fases**, y cada fase se despliega.
 |------|--------|-----------|--------|
 | **1** | Late y respira | Migraciones, RLS, auth, hogar, invitaciones, Home, Movimientos, alta de los 5 tipos de movimiento | ✅ |
 | **2** | Presupuesto | Pantalla Semana, presupuestos mensual y semanal flexibles, límites por categoría, prioridades | ✅ |
-| **3** | Lo que crece | Huchas (ahorro vs reservado), deuda, amortizaciones, gráfico de deuda | ✅ **esta entrega** |
-| 4 | Progreso | Objetivos, proyecciones, logros, rachas, patrimonio | ⏳ |
-| 5 | Ritmo | Cierre de semana y de mes, histórico, comparativas, insights | ⏳ |
+| **3** | Lo que crece | Huchas (ahorro vs reservado), deuda, amortizaciones, gráfico de deuda | ✅ |
+| **4** | Progreso | Objetivos, proyecciones, logros, rachas, patrimonio | ✅ |
+| **5** | Ritmo | Cierre de semana y de mes, histórico, comparativas, insights | ✅ **esta entrega** |
 | 6 | Comprometido | Recurrentes, gastos fijos, extraordinarios, calendario de pagos | ⏳ |
 | 7 | Vuestro | Categorías, etiquetas, cuentas, ajustes, exportar / importar / copia | ⏳ |
 | 8 | Pulido | PWA, accesibilidad AA, rendimiento, microinteracciones | ⏳ |

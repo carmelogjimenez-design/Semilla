@@ -1,14 +1,16 @@
 'use client';
 
-import { ChevronLeft, ChevronRight, Pencil, ShieldCheck, Waves } from 'lucide-react';
+import { CalendarCheck, ChevronLeft, ChevronRight, Pencil, ShieldCheck, Waves } from 'lucide-react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 
 import { AmountSheet } from '@/components/flows/amount-sheet';
 import { TransactionDetailSheet } from '@/components/flows/transaction-detail-sheet';
+import { WeekCloseSheet } from '@/components/flows/week-close-sheet';
 import { TransactionRow } from '@/components/transaction-row';
 import { BudgetBar, ProgressRing } from '@/components/ui/progress';
 import { Card, Chip, EmptyState, SectionTitle, StatusChip } from '@/components/ui/primitives';
 import { statusLabel } from '@/domain/calculations';
+import { nextWeekToClose, weekCloseDrafts, type WeekCloseDraft } from '@/domain/closing';
 import { capitalize, formatRange, monthLabel, weekProgress } from '@/domain/dates';
 import { formatCurrency } from '@/domain/money';
 import { buildCategorySpend } from '@/domain/selectors';
@@ -29,6 +31,7 @@ export function WeekScreen() {
     null,
   );
   const [selected, setSelected] = useState<Transaction | null>(null);
+  const [closingWeek, setClosingWeek] = useState<WeekCloseDraft | null>(null);
   const railRef = useRef<HTMLDivElement>(null);
 
   const weeks = view.weeks;
@@ -69,6 +72,15 @@ export function WeekScreen() {
       }),
     [data.categories, weekTransactions, weekBudget, elapsedRatio],
   );
+
+  /* Cierre (§30): sólo se ofrece cuando la semana ya ha terminado. La semana que
+     se propone es la más antigua sin cerrar, no la que se esté mirando. */
+  const drafts = useMemo(
+    () => weekCloseDrafts({ weeks, month, closes: data.weeklyCloses, today }),
+    [weeks, month, data.weeklyCloses, today],
+  );
+  const pendingClose = nextWeekToClose(drafts);
+  const closeOfViewedWeek = drafts.find((draft) => draft.week.index === activeIndex) ?? null;
 
   const weekSpent = week?.spent ?? 0;
   const overspent = week ? week.available < 0 : false;
@@ -145,6 +157,37 @@ export function WeekScreen() {
           </div>
         ))}
       </div>
+
+      {/* Cierre pendiente (§30) — el único aviso que interrumpe, y sólo cuando toca */}
+      {pendingClose ? (
+        <button
+          type="button"
+          onClick={() => setClosingWeek(pendingClose)}
+          className="mb-4 flex w-full touch items-center gap-3 rounded-3xl bg-forest px-5 py-4 text-left text-white active:opacity-90"
+        >
+          <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-2xl bg-white/15">
+            <CalendarCheck size={20} aria-hidden />
+          </span>
+          <span className="min-w-0 flex-1">
+            <span className="block text-[15px] font-semibold">
+              La semana {pendingClose.week.index} ya terminó
+            </span>
+            <span className="block text-[13px] text-white/70 tnum">
+              {pendingClose.margin >= 0
+                ? `Sobraron ${formatCurrency(pendingClose.margin)} · decidid dónde van`
+                : `${formatCurrency(-pendingClose.margin)} por encima · la que viene empieza limpia`}
+            </span>
+          </span>
+          <ChevronRight size={18} className="shrink-0 text-white/50" />
+        </button>
+      ) : null}
+
+      {closeOfViewedWeek?.closed ? (
+        <div className="mb-4 flex items-center gap-2 rounded-2xl bg-sage px-4 py-2.5 text-[13px] text-seed-800">
+          <CalendarCheck size={15} aria-hidden />
+          Semana cerrada. Se puede reabrir desde el histórico.
+        </div>
+      ) : null}
 
       {/* Hero: el anillo */}
       <Card className="flex flex-col items-center py-7">
@@ -322,6 +365,12 @@ export function WeekScreen() {
             ? actions.saveCategoryLimit(month, week.week.index, categoryLimit.id, amount)
             : undefined
         }
+      />
+
+      <WeekCloseSheet
+        open={closingWeek !== null}
+        onClose={() => setClosingWeek(null)}
+        draft={closingWeek}
       />
 
       <TransactionDetailSheet

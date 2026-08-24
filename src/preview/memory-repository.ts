@@ -1,5 +1,20 @@
 import type { SemillaRepository } from '@/data/repository';
-import type { HouseholdData, ID, Merchant, Transaction } from '@/domain/types';
+import type {
+  FinancialGoal,
+  HouseholdData,
+  ID,
+  Merchant,
+  MonthlyClose,
+  Transaction,
+  WeeklyClose,
+} from '@/domain/types';
+
+/** Sustituye por id o añade al final. */
+function upsert<T extends { id: ID }>(items: readonly T[], item: T): T[] {
+  return items.some((entry) => entry.id === item.id)
+    ? items.map((entry) => (entry.id === item.id ? item : entry))
+    : [...items, item];
+}
 
 /**
  * Repositorio en memoria para el modo previsualización de interfaz.
@@ -77,12 +92,39 @@ export class MemoryRepository implements SemillaRepository {
   async saveMonthlyBudget(): Promise<void> {}
   async saveWeeklyBudget(): Promise<void> {}
   async saveCategoryLimit(): Promise<void> {}
-  async saveGoal(): Promise<void> {}
-  async deleteGoal(): Promise<void> {}
-  async saveWeeklyClose(): Promise<void> {}
-  async deleteWeeklyClose(): Promise<void> {}
-  async saveMonthlyClose(): Promise<void> {}
-  async reopenMonth(): Promise<void> {}
+
+  /* Objetivos y cierres sí se guardan en memoria: son flujos que hay que poder
+     recorrer enteros al revisar el diseño. El provider recarga desde aquí después
+     de cada escritura, así que sin esto el cambio se vería y se desharía solo. */
+  async saveGoal(goal: FinancialGoal): Promise<void> {
+    this.data = { ...this.data, goals: upsert(this.data.goals, goal) };
+    this.notify();
+  }
+  async deleteGoal(id: ID): Promise<void> {
+    this.data = { ...this.data, goals: this.data.goals.filter((g) => g.id !== id) };
+    this.notify();
+  }
+  async saveWeeklyClose(close: WeeklyClose): Promise<void> {
+    this.data = { ...this.data, weeklyCloses: upsert(this.data.weeklyCloses, close) };
+    this.notify();
+  }
+  async deleteWeeklyClose(id: ID): Promise<void> {
+    this.data = { ...this.data, weeklyCloses: this.data.weeklyCloses.filter((c) => c.id !== id) };
+    this.notify();
+  }
+  async saveMonthlyClose(close: MonthlyClose): Promise<void> {
+    this.data = { ...this.data, monthlyCloses: upsert(this.data.monthlyCloses, close) };
+    this.notify();
+  }
+  async reopenMonth(id: ID): Promise<void> {
+    this.data = {
+      ...this.data,
+      monthlyCloses: this.data.monthlyCloses.map((c) =>
+        c.id === id ? { ...c, reopenedAt: new Date().toISOString() } : c,
+      ),
+    };
+    this.notify();
+  }
   async unlockAchievements(): Promise<void> {}
   async saveQuickAction(): Promise<void> {}
   async deleteQuickAction(): Promise<void> {}

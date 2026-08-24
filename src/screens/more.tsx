@@ -8,6 +8,7 @@ import {
   CreditCard,
   DatabaseBackup,
   Flame,
+  History,
   LogOut,
   PiggyBank,
   Repeat,
@@ -35,6 +36,7 @@ const AVAILABLE = [
   { href: '/mas/huchas', icon: PiggyBank, label: 'Huchas', hint: 'Ahorro y dinero reservado' },
   { href: '/mas/deudas', icon: Flame, label: 'Deuda', hint: 'Saldos, cuotas y amortizaciones' },
   { href: '/mas/logros', icon: Award, label: 'Logros', hint: 'Lo que ya habéis conseguido' },
+  { href: '/mas/historico', icon: History, label: 'Histórico', hint: 'Cierres, comparativas y meses anteriores' },
 ] as const;
 
 const UPCOMING = [
