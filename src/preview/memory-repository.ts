@@ -5,6 +5,7 @@ import type {
   ID,
   Merchant,
   MonthlyClose,
+  PlannedItem,
   Transaction,
   WeeklyClose,
 } from '@/domain/types';
@@ -87,8 +88,14 @@ export class MemoryRepository implements SemillaRepository {
   async deletePocket(): Promise<void> {}
   async saveDebt(): Promise<void> {}
   async deleteDebt(): Promise<void> {}
-  async savePlannedItem(): Promise<void> {}
-  async deletePlannedItem(): Promise<void> {}
+  async savePlannedItem(item: PlannedItem): Promise<void> {
+    this.data = { ...this.data, plannedItems: upsert(this.data.plannedItems, item) };
+    this.notify();
+  }
+  async deletePlannedItem(id: ID): Promise<void> {
+    this.data = { ...this.data, plannedItems: this.data.plannedItems.filter((p) => p.id !== id) };
+    this.notify();
+  }
   async saveMonthlyBudget(): Promise<void> {}
   async saveWeeklyBudget(): Promise<void> {}
   async saveCategoryLimit(): Promise<void> {}

@@ -37,10 +37,10 @@ const AVAILABLE = [
   { href: '/mas/deudas', icon: Flame, label: 'Deuda', hint: 'Saldos, cuotas y amortizaciones' },
   { href: '/mas/logros', icon: Award, label: 'Logros', hint: 'Lo que ya habéis conseguido' },
   { href: '/mas/historico', icon: History, label: 'Histórico', hint: 'Cierres, comparativas y meses anteriores' },
+  { href: '/mas/fijos', icon: Repeat, label: 'Comprometido', hint: 'Gastos fijos, calendario de pagos y extraordinarios' },
 ] as const;
 
 const UPCOMING = [
-  { icon: Repeat, label: 'Gastos fijos', phase: 'Fase 6' },
   { icon: Tag, label: 'Categorías y etiquetas', phase: 'Fase 7' },
   { icon: CreditCard, label: 'Cuentas', phase: 'Fase 7' },
   { icon: DatabaseBackup, label: 'Copia de seguridad', phase: 'Fase 7' },

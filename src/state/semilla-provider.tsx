@@ -416,7 +416,7 @@ export function SemillaProvider({ repository, initialData, currentUserId, childr
         await run(
           patch((current) => ({ plannedItems: upsertById(current.plannedItems, item) })),
           async () => repository.savePlannedItem(item),
-          { title: 'Previsto guardado' },
+          { title: 'Compromiso guardado' },
         );
       },
 

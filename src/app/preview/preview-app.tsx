@@ -7,6 +7,7 @@ import { AddTransactionSheet } from '@/components/flows/add-transaction-sheet';
 import { BudgetsScreen } from '@/screens/budgets';
 import { AchievementsScreen } from '@/screens/achievements';
 import { DebtsScreen } from '@/screens/debts';
+import { CommittedScreen } from '@/screens/committed';
 import { HistoryScreen } from '@/screens/history';
 import { ProgressScreen } from '@/screens/progress';
 import { PocketsScreen } from '@/screens/pockets';
@@ -32,7 +33,7 @@ export function PreviewApp() {
   const seed = useMemo(() => buildPreviewData(), []);
   const repository = useMemo(() => new MemoryRepository(seed), [seed]);
   const [tab, setTab] = useState<TabId>('home');
-  const [extra, setExtra] = useState<'budgets' | 'pockets' | 'debts' | 'awards' | 'history' | null>(null);
+  const [extra, setExtra] = useState<'budgets' | 'pockets' | 'debts' | 'awards' | 'history' | 'committed' | null>(null);
   const [addOpen, setAddOpen] = useState(false);
 
   return (
@@ -48,6 +49,7 @@ export function PreviewApp() {
               ['debts', 'Deuda'],
               ['awards', 'Logros'],
               ['history', 'Histórico'],
+              ['committed', 'Fijos'],
             ] as const
           ).map(([id, label]) => (
             <button
@@ -66,6 +68,7 @@ export function PreviewApp() {
         {extra === 'debts' ? <DebtsScreen /> : null}
         {extra === 'awards' ? <AchievementsScreen /> : null}
         {extra === 'history' ? <HistoryScreen /> : null}
+        {extra === 'committed' ? <CommittedScreen /> : null}
         {!extra && tab === 'home' ? <HomeScreen /> : null}
         {!extra && tab === 'movements' ? <MovementsScreen /> : null}
         {!extra && tab === 'more' ? <MoreScreen /> : null}
