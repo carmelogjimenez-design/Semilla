@@ -123,9 +123,15 @@ export function ProgressScreen() {
               <span>{formatPercent(goalProgress.overallRatio)} completado</span>
             </div>
             <div className="mt-2">
-              <BudgetBar value={goalProgress.overallRatio} status="green" height={10} marker={goalTime.ratio} />
+              <BudgetBar
+                value={goalProgress.overallRatio}
+                status="green"
+                height={10}
+                marker={goalTime.ratio}
+                label={`Progreso del objetivo ${goal.name}`}
+              />
             </div>
-            <p className="mt-2 text-[11px] text-stone-400">
+            <p className="mt-2 text-[11px] text-muted">
               La marca fina señala por dónde iría el calendario.
             </p>
 
@@ -159,7 +165,7 @@ export function ProgressScreen() {
 
             {/* Sin esta frase, ver «300 € de 15.000 €» debajo de un ahorro total
                 mucho mayor parece un error de la app. Cuenta desde el inicio. */}
-            <p className="mt-4 text-[11px] leading-relaxed text-stone-400">
+            <p className="mt-4 text-[11px] leading-relaxed text-muted">
               Cuenta lo hecho desde el {formatDayLong(goal.startDate)}. Lo que ya teníais ahorrado antes
               sigue ahí, pero no suma a este objetivo.
             </p>
@@ -203,7 +209,7 @@ export function ProgressScreen() {
             </div>
             {/* Cifras redondeadas a euros a propósito: son una estimación, y los
                 céntimos darían una precisión que no tienen. */}
-            <p className="mt-4 text-[12px] leading-relaxed text-stone-400">
+            <p className="mt-4 text-[12px] leading-relaxed text-muted">
               Estimado a {formatDayFull(goal.endDate)} con el ritmo de {observedLabel(projection.daysObserved)}.
               Es una proyección, no una certeza: cambiará según lo que hagáis.
             </p>
@@ -245,7 +251,7 @@ export function ProgressScreen() {
           {/* Las huchas no se suman aparte: son etiquetas sobre el dinero que ya
               está en las cuentas. Sumarlas sería contarlo dos veces. */}
           {series === 'netWorth' ? (
-            <p className="mt-3 text-[12px] leading-relaxed text-stone-400">
+            <p className="mt-3 text-[12px] leading-relaxed text-muted">
               Lo que tenéis en las cuentas menos lo que debéis. Las huchas ya están dentro: son etiquetas
               sobre ese mismo dinero, no un saldo aparte. La vivienda no entra: no es dinero disponible.
             </p>
@@ -292,8 +298,10 @@ export function ProgressScreen() {
           </Card>
         </div>
 
+        {/* Una franja que se arrastra tiene que poder recorrerse con el teclado:
+            dentro sólo hay texto, así que el foco va en la propia franja. */}
         {unlocked.length > 0 ? (
-          <div className="rail mt-3">
+          <div className="rail mt-3" tabIndex={0} role="group" aria-label="Logros conseguidos">
             {unlocked.slice(-6).map((entry) => (
               <span
                 key={entry.id}
@@ -307,7 +315,7 @@ export function ProgressScreen() {
         ) : null}
       </section>
 
-      <p className="mt-8 text-center text-[12px] leading-relaxed text-stone-400">
+      <p className="mt-8 text-center text-[12px] leading-relaxed text-muted">
         Vuestro ahorro está echando raíces.
       </p>
 
@@ -335,7 +343,7 @@ function Growing({ label, value, href }: { label: string; value: string; href?: 
         </span>
         <span className="mt-1 block text-[26px] font-semibold tnum">{value}</span>
       </span>
-      {href ? <ChevronRight size={18} className="shrink-0 text-white/40" /> : null}
+      {href ? <ChevronRight size={18} className="shrink-0 text-white/60" /> : null}
     </>
   );
   return href ? (

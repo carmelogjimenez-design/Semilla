@@ -206,7 +206,7 @@ export function BudgetsScreen() {
           </div>
         ) : null}
 
-        <p className="mt-3 px-1 text-[12px] leading-relaxed text-stone-400">
+        <p className="mt-3 px-1 text-[12px] leading-relaxed text-muted">
           Una semana sin cifra propia usa la parte proporcional del mes según sus días. Las semanas
           parciales del principio y del final cuentan solo los días que tienen.
         </p>

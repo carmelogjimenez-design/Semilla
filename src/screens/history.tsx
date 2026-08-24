@@ -140,7 +140,7 @@ export function HistoryScreen() {
                 {line}
               </p>
             ))}
-            <p className="pt-1 text-[12px] text-stone-400">
+            <p className="pt-1 text-[12px] text-muted">
               Cerrado el {formatDayLong(closed.closedAt.slice(0, 10))}.
             </p>
           </div>
@@ -162,7 +162,7 @@ export function HistoryScreen() {
         <section className="mt-6">
           <SectionTitle>Qué cambió</SectionTitle>
           <Card className="space-y-3.5">
-            <p className="text-[12px] leading-relaxed text-stone-400">
+            <p className="text-[12px] leading-relaxed text-muted">
               Frente a {monthLabel(previousMonth, { capitalize: false })}. Ordenado por lo que más se movió,
               no por lo que más pesa.
             </p>
@@ -186,15 +186,15 @@ export function HistoryScreen() {
                     insight.tone === 'good'
                       ? 'text-seed-600'
                       : insight.tone === 'watch'
-                        ? 'text-clay'
-                        : 'text-stone-400'
+                        ? 'text-clay-deep'
+                        : 'text-muted'
                   }`}
                   aria-hidden
                 />
                 <p className="text-[14px] leading-relaxed text-ink">{insight.text}</p>
               </div>
             ))}
-            <p className="pt-1 text-[12px] leading-relaxed text-stone-400">
+            <p className="pt-1 text-[12px] leading-relaxed text-muted">
               Salen de comparar vuestros propios números. Ninguna frase la escribe una IA.
             </p>
           </Card>
@@ -254,7 +254,7 @@ function WeekCloses({ month }: { month: string }) {
             </button>
           </div>
         ))}
-        <p className="pt-1 text-[12px] leading-relaxed text-stone-400">
+        <p className="pt-1 text-[12px] leading-relaxed text-muted">
           Reabrir una semana borra su cierre, pero no toca los movimientos que se crearon al repartir el
           margen: esos siguen ahí.
         </p>
@@ -279,7 +279,7 @@ function ChangeRow({ change }: { change: CategoryChange }) {
         </span>
         <span
           className={`flex items-center justify-end gap-0.5 text-[12px] tnum ${
-            flat ? 'text-muted' : up ? 'text-clay' : 'text-seed-700'
+            flat ? 'text-muted' : up ? 'text-clay-deep' : 'text-seed-700'
           }`}
         >
           <Icon size={12} aria-hidden />

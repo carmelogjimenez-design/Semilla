@@ -39,7 +39,7 @@ export function TrendChart({
 
   if (points.length < 2) {
     return (
-      <p className="text-[12px] leading-relaxed text-stone-400">
+      <p className="text-[12px] leading-relaxed text-muted">
         {emptyHint ?? 'Hace falta más de un mes de recorrido para dibujar la evolución.'}
       </p>
     );
@@ -103,7 +103,7 @@ export function TrendChart({
           strokeDasharray={min < 0 ? '3 3' : undefined}
         />
         {min < 0 ? (
-          <text x={pad.left} y={base - 4} className="fill-stone-400" style={{ fontSize: 9 }}>
+          <text x={pad.left} y={base - 4} className="fill-muted" style={{ fontSize: 9 }}>
             0 €
           </text>
         ) : null}
@@ -143,7 +143,7 @@ export function TrendChart({
               x={x(index)}
               y={height - 6}
               textAnchor="middle"
-              className="fill-stone-400"
+              className="fill-muted"
               style={{ fontSize: 9 }}
             >
               {point.label}

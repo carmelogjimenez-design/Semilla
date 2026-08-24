@@ -38,7 +38,16 @@ export function AppShell({ children }: { children: ReactNode }) {
           </div>
         ) : null}
 
-        {children}
+        {/* Saltar a lo importante: con lector de pantalla o con teclado, la barra
+            inferior no debería obligar a pasar por delante en cada pantalla. */}
+        <a
+          href="#contenido"
+          className="sr-only focus:not-sr-only focus:absolute focus:left-4 focus:top-4 focus:z-[80] focus:rounded-full focus:bg-forest focus:px-4 focus:py-2 focus:text-[14px] focus:font-semibold focus:text-white"
+        >
+          Saltar al contenido
+        </a>
+
+        <main id="contenido">{children}</main>
       </div>
 
       {/* Capa fija anclada a la columna, no a la ventana: en escritorio el botón
@@ -79,12 +88,12 @@ export function AppShell({ children }: { children: ReactNode }) {
                     <Icon
                       size={22}
                       strokeWidth={active ? 2.4 : 1.8}
-                      className={active ? 'text-forest' : 'text-stone-400'}
+                      className={active ? 'text-forest' : 'text-muted'}
                       aria-hidden
                     />
                     <span
                       className={`text-[10px] font-semibold tracking-wide ${
-                        active ? 'text-forest' : 'text-stone-400'
+                        active ? 'text-forest' : 'text-muted'
                       }`}
                     >
                       {tab.label}

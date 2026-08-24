@@ -136,7 +136,7 @@ export function DebtsScreen() {
             </button>
           </section>
 
-          <p className="mt-6 text-center text-[12px] leading-relaxed text-stone-400">
+          <p className="mt-6 text-center text-[12px] leading-relaxed text-muted">
             Cada mes hay menos.
           </p>
         </>
@@ -203,7 +203,7 @@ export function DebtsScreen() {
               />
             </div>
 
-            <p className="mt-3 text-center text-[12px] leading-relaxed text-stone-400">
+            <p className="mt-3 text-center text-[12px] leading-relaxed text-muted">
               La cuota es lo normal. La amortización extraordinaria es la que acorta el préstamo.
             </p>
           </div>

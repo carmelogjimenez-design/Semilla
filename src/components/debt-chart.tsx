@@ -177,7 +177,7 @@ export function DebtChart({
           ))}
         </ul>
       ) : !hasMovement ? (
-        <p className="mt-2 text-[12px] leading-relaxed text-stone-400">
+        <p className="mt-2 text-[12px] leading-relaxed text-muted">
           Todavía no hay pagos registrados. En cuanto registréis el primero, esta línea empezará a bajar.
         </p>
       ) : null}

@@ -135,7 +135,7 @@ export function WeekCloseSheet({
         <div className={`rounded-3xl px-5 py-5 ${margin >= 0 ? 'bg-sage' : 'bg-warm'}`}>
           <p
             className={`text-[12px] font-semibold uppercase tracking-wide ${
-              margin >= 0 ? 'text-seed-800/70' : 'text-muted'
+              margin >= 0 ? 'text-seed-800' : 'text-muted'
             }`}
           >
             {draft.planned === 0 ? 'Gastado' : margin >= 0 ? 'Os sobró' : 'Os pasasteis'}
@@ -146,7 +146,7 @@ export function WeekCloseSheet({
           {draft.planned > 0 ? (
             <p
               className={`mt-2 text-[13px] leading-relaxed tnum ${
-                margin >= 0 ? 'text-seed-800/80' : 'text-muted'
+                margin >= 0 ? 'text-seed-800' : 'text-muted'
               }`}
             >
               {formatCurrency(draft.spent)} de {formatCurrency(draft.planned)}.{' '}
@@ -232,7 +232,7 @@ export function WeekCloseSheet({
           </>
         ) : null}
 
-        <p className="text-[12px] leading-relaxed text-stone-400">
+        <p className="text-[12px] leading-relaxed text-muted">
           Cerrar una semana no bloquea nada: podéis reabrirla desde el histórico si aparece un movimiento
           que faltaba.
         </p>

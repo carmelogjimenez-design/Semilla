@@ -24,12 +24,12 @@ export const metadata: Metadata = {
   formatDetection: { telephone: false },
 };
 
+/* Sin `maximumScale` ni `userScalable: false`: bloquear el zoom es cómodo para
+   el desarrollador y una barrera para quien necesita agrandar. WCAG 1.4.4. */
 export const viewport: Viewport = {
   themeColor: '#FAF8F3',
   width: 'device-width',
   initialScale: 1,
-  maximumScale: 1,
-  userScalable: false,
   viewportFit: 'cover',
 };
 

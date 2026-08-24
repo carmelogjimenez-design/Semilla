@@ -144,7 +144,7 @@ export function CommittedScreen() {
               </div>
             ) : null}
 
-            <p className="mt-4 text-[12px] leading-relaxed text-stone-400 tnum">
+            <p className="mt-4 text-[12px] leading-relaxed text-muted tnum">
               Todo lo fijo suma {formatCurrency(annual)} al año.
               {summary.expectedIncome > 0
                 ? ` Con ${formatCurrency(summary.expectedIncome)} de ingresos previstos este mes.`
@@ -165,7 +165,7 @@ export function CommittedScreen() {
                       <span className="text-[13px] font-semibold text-ink">
                         {formatDayLong(day.date)}
                       </span>
-                      <span className="text-[12px] text-stone-400">{relativeLabel(day.offset)}</span>
+                      <span className="text-[12px] text-muted">{relativeLabel(day.offset)}</span>
                       <span className="ml-auto text-[13px] font-semibold tnum text-ink">
                         {formatCurrency(day.total)}
                       </span>
@@ -205,7 +205,7 @@ export function CommittedScreen() {
                       <span className="block truncate text-[15px] font-medium text-ink">
                         {item.name}
                         {item.extraordinary ? (
-                          <span className="ml-1.5 text-[11px] font-semibold text-clay">extraordinario</span>
+                          <span className="ml-1.5 text-[11px] font-semibold text-clay-deep">extraordinario</span>
                         ) : null}
                       </span>
                       <span className="block truncate text-[12px] text-muted">
@@ -217,7 +217,7 @@ export function CommittedScreen() {
                       {item.kind === 'income' ? '+' : ''}
                       {formatCurrency(item.expectedAmount)}
                     </span>
-                    <ChevronRight size={16} className="shrink-0 text-stone-400" aria-hidden />
+                    <ChevronRight size={16} className="shrink-0 text-muted" aria-hidden />
                   </button>
                 ))}
               </div>
@@ -248,7 +248,7 @@ export function CommittedScreen() {
                 {formatCurrency(extraordinary.total)}
               </span>
             </div>
-            <p className="mt-1 text-[12px] text-stone-400 tnum">
+            <p className="mt-1 text-[12px] text-muted tnum">
               {formatPercent(extraordinary.shareOfExpenses)} de todo lo gastado este mes.
             </p>
             <div className="mt-4 space-y-2.5">
@@ -268,7 +268,7 @@ export function CommittedScreen() {
         )}
       </section>
 
-      <p className="mt-8 text-center text-[12px] leading-relaxed text-stone-400">
+      <p className="mt-8 text-center text-[12px] leading-relaxed text-muted">
         Un compromiso no mueve dinero por sí solo.
         <br />
         El movimiento se registra el día que se paga.
@@ -304,7 +304,7 @@ function OccurrenceRow({
             ? 'bg-sage text-seed-700'
             : status === 'overdue'
               ? 'bg-amber-bg text-amber-deep'
-              : 'bg-stone-100 text-stone-400'
+              : 'bg-stone-100 text-muted'
         }`}
       >
         {done ? <Check size={15} strokeWidth={3} aria-hidden /> : <span className="text-[13px]">·</span>}

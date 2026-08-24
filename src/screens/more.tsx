@@ -28,8 +28,7 @@ import { useSemilla } from '@/state/semilla-provider';
 
 /**
  * MÁS — la casa por dentro.
- * En esta fase están operativos Familia y la sesión; el resto se marca con la
- * fase en la que llega, para que nadie toque un botón que no lleva a ningún sitio.
+ * Todo lo que hay aquí funciona: ya no queda ninguna pantalla por llegar.
  */
 
 const AVAILABLE = [
@@ -42,10 +41,7 @@ const AVAILABLE = [
   { href: '/mas/categorias', icon: Tag, label: 'Categorías y etiquetas', hint: 'El vocabulario de la casa' },
   { href: '/mas/cuentas', icon: CreditCard, label: 'Cuentas', hint: 'Saldos, medios de pago' },
   { href: '/mas/ajustes', icon: DatabaseBackup, label: 'Ajustes y copia', hint: 'Nombres, copia de seguridad y privacidad' },
-] as const;
-
-const UPCOMING = [
-  { icon: Smartphone, label: 'Instalar en el móvil', phase: 'Fase 8' },
+  { href: '/mas/instalar', icon: Smartphone, label: 'Instalar en el móvil', hint: 'Abrirla como una app, sin pasar por el navegador' },
 ] as const;
 
 export function MoreScreen() {
@@ -159,32 +155,9 @@ export function MoreScreen() {
                       <span className="block text-[15px] font-medium text-ink">{item.label}</span>
                       <span className="block truncate text-[13px] text-muted">{item.hint}</span>
                     </span>
-                    <ChevronRight size={18} className="shrink-0 text-stone-400" />
+                    <ChevronRight size={18} className="shrink-0 text-muted" />
                   </div>
                 </Link>
-              );
-            })}
-          </div>
-        </Card>
-      </section>
-
-      {/* Roadmap visible */}
-      <section className="mt-6">
-        <SectionTitle>En camino</SectionTitle>
-        <Card className="px-2 py-1">
-          <div className="divide-y divide-stone-100">
-            {UPCOMING.map((item) => {
-              const Icon = item.icon;
-              return (
-                <div key={item.label} className="flex items-center gap-3 px-2 py-3.5 opacity-60">
-                  <span className="flex h-9 w-9 items-center justify-center rounded-xl bg-stone-100">
-                    <Icon size={18} className="text-stone-500" aria-hidden />
-                  </span>
-                  <span className="flex-1 text-[15px] text-ink">{item.label}</span>
-                  <span className="rounded-full bg-stone-100 px-2.5 py-1 text-[11px] font-semibold text-muted">
-                    {item.phase}
-                  </span>
-                </div>
               );
             })}
           </div>
@@ -210,7 +183,7 @@ export function MoreScreen() {
         <Link href="/movimientos" className="block">
           <Card className="flex items-center gap-3">
             <span className="flex-1 text-[15px] font-medium text-ink">Todos los movimientos</span>
-            <ChevronRight size={18} className="text-stone-400" />
+            <ChevronRight size={18} className="text-muted" />
           </Card>
         </Link>
       </section>
@@ -223,7 +196,7 @@ export function MoreScreen() {
         <LogOut size={18} /> Cerrar sesión
       </button>
 
-      <p className="mt-8 text-center text-[12px] text-stone-400">Semilla · Haz crecer lo que tienes.</p>
+      <p className="mt-8 text-center text-[12px] text-muted">Semilla · Haz crecer lo que tienes.</p>
 
       <BottomSheet
         open={inviting}

@@ -77,21 +77,21 @@ export function MovementsScreen() {
       </header>
 
       <div className="relative">
-        <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-stone-400" aria-hidden />
+        <Search size={18} className="absolute left-4 top-1/2 -translate-y-1/2 text-muted" aria-hidden />
         <input
           type="search"
           value={query}
           onChange={(event) => setQuery(event.target.value)}
           placeholder="Buscar mercadona, fisio, gasolina…"
           aria-label="Buscar movimientos"
-          className="w-full rounded-2xl border border-stone-200 bg-surface py-3.5 pl-11 pr-11 text-[16px] text-ink placeholder:text-stone-400 focus:border-seed-500 focus:outline-none focus:ring-2 focus:ring-seed-500/20"
+          className="w-full rounded-2xl border border-stone-200 bg-surface py-3.5 pl-11 pr-11 text-[16px] text-ink placeholder:text-muted focus:border-seed-500 focus:outline-none focus:ring-2 focus:ring-seed-500/20"
         />
         {query ? (
           <button
             type="button"
             onClick={() => setQuery('')}
             aria-label="Limpiar búsqueda"
-            className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-1.5 text-stone-400 active:bg-stone-100"
+            className="absolute right-3 top-1/2 -translate-y-1/2 rounded-full p-1.5 text-muted active:bg-stone-100"
           >
             <X size={16} />
           </button>
@@ -143,7 +143,7 @@ export function MovementsScreen() {
                     .filter((t) => t.kind === 'expense')
                     .reduce((sum, t) => sum + t.amount, 0);
                   return spent > 0 ? (
-                    <span className="text-[12px] text-stone-400 tnum">{formatCurrency(spent)}</span>
+                    <span className="text-[12px] text-muted tnum">{formatCurrency(spent)}</span>
                   ) : null;
                 })()}
               </div>

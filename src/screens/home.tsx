@@ -116,6 +116,7 @@ export function HomeScreen() {
                     height={10}
                     className="bg-white/15"
                     marker={elapsedRatio}
+                    label="Gastado de lo previsto esta semana"
                   />
                 </div>
                 <div className="mt-4 flex flex-wrap items-center gap-x-3 gap-y-2">
@@ -193,7 +194,7 @@ export function HomeScreen() {
                   Cerradlo y queda guardado cómo fue
                 </span>
               </span>
-              <ChevronRight size={18} className="shrink-0 text-stone-400" />
+              <ChevronRight size={18} className="shrink-0 text-muted" />
             </Card>
           </Link>
         </section>
@@ -280,7 +281,7 @@ export function HomeScreen() {
         )}
       </section>
 
-      <p className="mt-8 text-center text-[12px] leading-relaxed text-stone-400">
+      <p className="mt-8 text-center text-[12px] leading-relaxed text-muted">
         Lo importante no es gastar perfecto.
         <br />
         Es saber dónde estáis.
@@ -315,7 +316,7 @@ function FreeMoneyCard() {
             onClick={() => setOpen((value) => !value)}
             aria-label="Cómo se calcula el dinero libre"
             aria-expanded={open}
-            className="touch -mr-2 -mt-1 rounded-full p-2 text-stone-400 active:bg-stone-100"
+            className="touch -mr-2 -mt-1 rounded-full p-2 text-muted active:bg-stone-100"
           >
             <Info size={18} />
           </button>

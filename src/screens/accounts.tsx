@@ -61,7 +61,7 @@ export function AccountsScreen() {
               Saldo disponible
             </p>
             <p className="mt-1 text-display tnum text-ink">{formatCurrency(total)}</p>
-            <p className="mt-2 text-[12px] leading-relaxed text-stone-400">
+            <p className="mt-2 text-[12px] leading-relaxed text-muted">
               Suma de las cuentas marcadas como disponibles. Sale del saldo de partida más todo lo
               registrado desde su fecha.
             </p>
@@ -90,7 +90,7 @@ export function AccountsScreen() {
                     <span className="shrink-0 text-[15px] font-semibold tnum text-ink">
                       {formatCurrency(entry.balance)}
                     </span>
-                    <ChevronRight size={16} className="shrink-0 text-stone-400" aria-hidden />
+                    <ChevronRight size={16} className="shrink-0 text-muted" aria-hidden />
                   </button>
                 ))}
               </div>
@@ -134,7 +134,7 @@ export function AccountsScreen() {
                           {account ? `Sale de ${account.name}` : 'Sin cuenta asociada'}
                         </span>
                       </span>
-                      <ChevronRight size={16} className="shrink-0 text-stone-400" aria-hidden />
+                      <ChevronRight size={16} className="shrink-0 text-muted" aria-hidden />
                     </button>
                   );
                 })}
@@ -148,7 +148,7 @@ export function AccountsScreen() {
         )}
       </section>
 
-      <p className="mt-8 text-center text-[12px] leading-relaxed text-stone-400">
+      <p className="mt-8 text-center text-[12px] leading-relaxed text-muted">
         Si un saldo no cuadra con el del banco,
         <br />
         casi siempre es que falta registrar algo.

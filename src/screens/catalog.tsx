@@ -77,7 +77,7 @@ export function CatalogScreen() {
                     ) : null}
                   </span>
                 </span>
-                <ChevronRight size={16} className="shrink-0 text-stone-400" aria-hidden />
+                <ChevronRight size={16} className="shrink-0 text-muted" aria-hidden />
               </button>
             ))}
           </div>
@@ -117,13 +117,13 @@ export function CatalogScreen() {
                       {category.emoji}
                     </span>
                     <span className="flex-1 truncate text-[15px] text-ink">{category.name}</span>
-                    <ChevronRight size={16} className="shrink-0 text-stone-400" aria-hidden />
+                    <ChevronRight size={16} className="shrink-0 text-muted" aria-hidden />
                   </button>
                 ))}
               </div>
             </Card>
           ) : null}
-          <p className="mt-2 text-[12px] leading-relaxed text-stone-400">
+          <p className="mt-2 text-[12px] leading-relaxed text-muted">
             Lo archivado sigue contando en el histórico. Sólo deja de aparecer al registrar.
           </p>
         </section>

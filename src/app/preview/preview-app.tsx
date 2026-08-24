@@ -12,6 +12,7 @@ import { CatalogScreen } from '@/screens/catalog';
 import { CommittedScreen } from '@/screens/committed';
 import { SettingsScreen } from '@/screens/settings';
 import { HistoryScreen } from '@/screens/history';
+import { InstallScreen } from '@/screens/install';
 import { ProgressScreen } from '@/screens/progress';
 import { PocketsScreen } from '@/screens/pockets';
 import { HomeScreen } from '@/screens/home';
@@ -36,7 +37,7 @@ export function PreviewApp() {
   const seed = useMemo(() => buildPreviewData(), []);
   const repository = useMemo(() => new MemoryRepository(seed), [seed]);
   const [tab, setTab] = useState<TabId>('home');
-  const [extra, setExtra] = useState<'budgets' | 'pockets' | 'debts' | 'awards' | 'history' | 'committed' | 'catalog' | 'accounts' | 'settings' | null>(null);
+  const [extra, setExtra] = useState<'budgets' | 'pockets' | 'debts' | 'awards' | 'history' | 'committed' | 'catalog' | 'accounts' | 'settings' | 'install' | null>(null);
   const [addOpen, setAddOpen] = useState(false);
 
   return (
@@ -56,6 +57,7 @@ export function PreviewApp() {
               ['catalog', 'Categ.'],
               ['accounts', 'Cuentas'],
               ['settings', 'Ajustes'],
+              ['install', 'Instalar'],
             ] as const
           ).map(([id, label]) => (
             <button
@@ -69,6 +71,7 @@ export function PreviewApp() {
           ))}
         </div>
 
+        <main>
         {extra === 'budgets' ? <BudgetsScreen /> : null}
         {extra === 'pockets' ? <PocketsScreen /> : null}
         {extra === 'debts' ? <DebtsScreen /> : null}
@@ -78,11 +81,13 @@ export function PreviewApp() {
         {extra === 'catalog' ? <CatalogScreen /> : null}
         {extra === 'accounts' ? <AccountsScreen /> : null}
         {extra === 'settings' ? <SettingsScreen /> : null}
+        {extra === 'install' ? <InstallScreen /> : null}
         {!extra && tab === 'home' ? <HomeScreen /> : null}
         {!extra && tab === 'movements' ? <MovementsScreen /> : null}
         {!extra && tab === 'more' ? <MoreScreen /> : null}
         {!extra && tab === 'week' ? <WeekScreen /> : null}
         {!extra && tab === 'progress' ? <ProgressScreen /> : null}
+        </main>
 
         {/* Igual que en la app: botón y barra anclados a la columna. */}
         <div className="pointer-events-none fixed inset-x-0 bottom-0 z-50 mx-auto w-full max-w-lg">
@@ -114,11 +119,11 @@ export function PreviewApp() {
                     <Icon
                       size={22}
                       strokeWidth={active ? 2.4 : 1.8}
-                      className={active ? 'text-forest' : 'text-stone-400'}
+                      className={active ? 'text-forest' : 'text-muted'}
                     />
                     <span
                       className={`text-[10px] font-semibold tracking-wide ${
-                        active ? 'text-forest' : 'text-stone-400'
+                        active ? 'text-forest' : 'text-muted'
                       }`}
                     >
                       {item.label}

@@ -129,7 +129,7 @@ export function TransactionDetailSheet({
             </div>
           ) : null}
 
-          <p className="mt-3 text-[12px] text-stone-400">
+          <p className="mt-3 text-[12px] text-muted">
             Registrado por {author?.name ?? 'alguien del hogar'}
             {editor && editor.userId !== author?.userId ? ` · editado por ${editor.name}` : ''}
           </p>

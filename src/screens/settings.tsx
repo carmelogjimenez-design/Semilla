@@ -177,7 +177,7 @@ export function SettingsScreen() {
             <Download size={18} /> Descargar copia
           </Button>
 
-          <p className="text-[12px] text-stone-400 tnum">
+          <p className="text-[12px] text-muted tnum">
             {data.settings.lastBackupAt
               ? `Última copia: ${formatDayLong(data.settings.lastBackupAt.slice(0, 10))}.`
               : 'Todavía no habéis hecho ninguna.'}
@@ -247,7 +247,7 @@ export function SettingsScreen() {
         </Card>
       </section>
 
-      <p className="mt-8 text-center text-[12px] leading-relaxed text-stone-400">
+      <p className="mt-8 text-center text-[12px] leading-relaxed text-muted">
         Semilla · Haz crecer lo que tienes.
       </p>
     </div>

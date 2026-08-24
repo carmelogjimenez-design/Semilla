@@ -113,9 +113,12 @@ export function Chip({
 
 type ButtonVariant = 'primary' | 'secondary' | 'ghost' | 'danger';
 
+/* Un botón desactivado en gris claro sobre texto blanco no se lee: aunque las
+   normas de contraste no lo exijan, un botón que no se puede leer tampoco se
+   puede entender. */
 const BUTTON_STYLE: Record<ButtonVariant, string> = {
-  primary: 'bg-forest text-white active:bg-seed-800 disabled:bg-stone-300',
-  secondary: 'bg-sage text-forest active:bg-seed-200 disabled:bg-stone-100 disabled:text-stone-400',
+  primary: 'bg-forest text-white active:bg-seed-800 disabled:bg-stone-200 disabled:text-muted',
+  secondary: 'bg-sage text-forest active:bg-seed-200 disabled:bg-stone-100 disabled:text-muted',
   ghost: 'bg-transparent text-forest active:bg-stone-100',
   danger: 'bg-coral-bg text-coral-deep active:bg-coral/20',
 };
@@ -130,7 +133,7 @@ export function Button({
   return (
     <button
       {...props}
-      className={`touch inline-flex items-center justify-center gap-2 rounded-2xl px-5 py-3.5 text-[15px] font-semibold transition disabled:cursor-not-allowed ${
+      className={`touch inline-flex items-center justify-center gap-2 rounded-2xl px-5 py-3.5 text-[15px] font-semibold transition active:scale-[0.985] disabled:cursor-not-allowed disabled:active:scale-100 motion-reduce:transform-none ${
         BUTTON_STYLE[variant]
       } ${full ? 'w-full' : ''} ${className ?? ''}`}
     >
@@ -190,7 +193,7 @@ export function ListRow({
           {valueHint ? <span className="mt-0.5 block text-[12px] text-muted tnum">{valueHint}</span> : null}
         </span>
       ) : null}
-      {chevron ? <ChevronRight size={18} className="ml-1 shrink-0 text-stone-400" aria-hidden /> : null}
+      {chevron ? <ChevronRight size={18} className="ml-1 shrink-0 text-muted" aria-hidden /> : null}
     </>
   );
 
@@ -235,7 +238,7 @@ export function TextInput({ className, ...props }: InputHTMLAttributes<HTMLInput
   return (
     <input
       {...props}
-      className={`w-full rounded-2xl border border-stone-200 bg-surface px-4 py-3.5 text-[16px] text-ink placeholder:text-stone-400 focus:border-seed-500 focus:outline-none focus:ring-2 focus:ring-seed-500/20 ${className ?? ''}`}
+      className={`w-full rounded-2xl border border-stone-200 bg-surface px-4 py-3.5 text-[16px] text-ink placeholder:text-muted focus:border-seed-500 focus:outline-none focus:ring-2 focus:ring-seed-500/20 ${className ?? ''}`}
     />
   );
 }

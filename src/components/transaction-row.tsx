@@ -78,7 +78,7 @@ export function presentTransaction(
         subtitle: `${from?.name ?? '—'} → ${to?.name ?? '—'}`,
         amountLabel: formatCurrency(transaction.amount),
         amountClass: 'text-muted',
-        icon: <ArrowLeftRight size={20} className="text-stone-400" />,
+        icon: <ArrowLeftRight size={20} className="text-muted" />,
       };
     }
   }

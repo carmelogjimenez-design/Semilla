@@ -2,7 +2,7 @@
 
 import { AnimatePresence, motion } from 'framer-motion';
 import { X } from 'lucide-react';
-import { useEffect, type ReactNode } from 'react';
+import { useEffect, useId, type ReactNode } from 'react';
 
 /**
  * Hoja inferior. En móvil sustituye a cualquier modal de escritorio (§2).
@@ -27,6 +27,10 @@ export function BottomSheet({
   maxHeight?: string;
   dismissable?: boolean;
 }) {
+  /* Un diálogo sin nombre accesible se anuncia como «diálogo» y ya: quien lo oye
+     no sabe qué acaba de abrir. Se lo damos con el propio título de la hoja. */
+  const titleId = useId();
+
   useEffect(() => {
     if (!open) return;
     const onKey = (event: KeyboardEvent) => {
@@ -57,6 +61,7 @@ export function BottomSheet({
           <motion.div
             role="dialog"
             aria-modal="true"
+            {...(title ? { 'aria-labelledby': titleId } : { 'aria-label': 'Panel' })}
             className="relative flex w-full max-w-lg flex-col overflow-hidden rounded-t-[28px] bg-surface shadow-sheet sm:mb-4 sm:rounded-[28px]"
             style={{ maxHeight }}
             initial={{ y: '100%' }}
@@ -77,7 +82,9 @@ export function BottomSheet({
             {title ? (
               <div className="flex items-start gap-3 px-5 pb-3 pt-3">
                 <div className="min-w-0 flex-1">
-                  <h2 className="text-title text-ink">{title}</h2>
+                  <h2 id={titleId} className="text-title text-ink">
+                    {title}
+                  </h2>
                   {subtitle ? <p className="mt-0.5 text-[13px] text-muted">{subtitle}</p> : null}
                 </div>
                 {dismissable ? (

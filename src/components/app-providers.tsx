@@ -1,5 +1,6 @@
 'use client';
 
+import { MotionConfig } from 'framer-motion';
 import { useMemo, type ReactNode } from 'react';
 
 import { AppShell } from '@/components/app-shell';
@@ -27,8 +28,13 @@ export function AppProviders({
   const repository = useMemo(() => new SupabaseRepository(createClient()), []);
 
   return (
-    <SemillaProvider repository={repository} initialData={initialData} currentUserId={currentUserId}>
-      <AppShell>{children}</AppShell>
-    </SemillaProvider>
+    /* `reducedMotion="user"` hace que Framer respete la preferencia del sistema.
+       El CSS ya frenaba las animaciones declarativas, pero las de JavaScript
+       seguían moviéndose: para quien marea el movimiento, eso no es un detalle. */
+    <MotionConfig reducedMotion="user">
+      <SemillaProvider repository={repository} initialData={initialData} currentUserId={currentUserId}>
+        <AppShell>{children}</AppShell>
+      </SemillaProvider>
+    </MotionConfig>
   );
 }

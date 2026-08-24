@@ -229,7 +229,7 @@ export function WeekScreen() {
               )}
             </div>
             {progress.remaining > 0 ? (
-              <p className="mt-3 max-w-[30ch] text-center text-[12px] leading-relaxed text-stone-400 tnum">
+              <p className="mt-3 max-w-[30ch] text-center text-[12px] leading-relaxed text-muted tnum">
                 Quedan {progress.remaining} {progress.remaining === 1 ? 'día' : 'días'} · ritmo disponible{' '}
                 {formatCurrency(week.available > 0 ? Math.round(week.available / progress.remaining) : 0)}/día.
                 No es un objetivo de gasto.
@@ -296,7 +296,7 @@ export function WeekScreen() {
                 />
               </button>
             ))}
-            <p className="pt-1 text-[12px] text-stone-400">
+            <p className="pt-1 text-[12px] text-muted">
               Toca una categoría para ponerle un límite en esta semana.
             </p>
           </Card>

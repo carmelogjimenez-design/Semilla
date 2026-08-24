@@ -56,9 +56,9 @@ export function AchievementsScreen() {
                   {entry.emoji}
                 </span>
                 <p className="mt-2 text-[14px] font-semibold text-seed-900">{entry.title}</p>
-                <p className="mt-1 text-[12px] leading-snug text-seed-800/80">{entry.description}</p>
+                <p className="mt-1 text-[12px] leading-snug text-seed-800">{entry.description}</p>
                 {entry.unlockedAt ? (
-                  <p className="mt-2 text-[11px] text-seed-800/60">{formatDayLong(entry.unlockedAt.slice(0, 10))}</p>
+                  <p className="mt-2 text-[11px] text-seed-800">{formatDayLong(entry.unlockedAt.slice(0, 10))}</p>
                 ) : null}
               </motion.div>
             ))}
@@ -77,7 +77,7 @@ export function AchievementsScreen() {
         </section>
       ) : null}
 
-      <p className="mt-8 text-center text-[12px] leading-relaxed text-stone-400">
+      <p className="mt-8 text-center text-[12px] leading-relaxed text-muted">
         Ninguno mide quién de los dos lo hizo.
         <br />
         Todos son de la casa.

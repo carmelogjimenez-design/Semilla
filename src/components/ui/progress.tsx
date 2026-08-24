@@ -123,6 +123,7 @@ export function BudgetBar({
   height = 8,
   className,
   marker,
+  label,
 }: {
   value: number;
   status?: HealthStatus;
@@ -130,16 +131,29 @@ export function BudgetBar({
   className?: string;
   /** Marca opcional 0..1 para señalar el ritmo esperado. */
   marker?: number;
+  /**
+   * Qué mide la barra. Sin esto la barra es decorativa y se oculta al lector de
+   * pantalla: una barra de progreso anónima sólo añade ruido cuando el mismo dato
+   * ya está escrito al lado con todas sus letras.
+   */
+  label?: string;
 }) {
   const clamped = Math.max(0, Math.min(1, value));
+  const percent = Math.round(clamped * 100);
   return (
     <div
       className={`relative w-full overflow-hidden rounded-full bg-sage ${className ?? ''}`}
       style={{ height }}
-      role="progressbar"
-      aria-valuenow={Math.round(clamped * 100)}
-      aria-valuemin={0}
-      aria-valuemax={100}
+      {...(label
+        ? {
+            role: 'progressbar' as const,
+            'aria-label': label,
+            'aria-valuenow': percent,
+            'aria-valuemin': 0,
+            'aria-valuemax': 100,
+            'aria-valuetext': `${percent} %`,
+          }
+        : { 'aria-hidden': true })}
     >
       <motion.div
         className="h-full rounded-full"

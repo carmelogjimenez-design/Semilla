@@ -68,7 +68,7 @@ export function MonthCloseSheet({
         <div className={`rounded-3xl px-5 py-5 ${positive ? 'bg-sage' : 'bg-warm'}`}>
           <p
             className={`text-[12px] font-semibold uppercase tracking-wide ${
-              positive ? 'text-seed-800/70' : 'text-muted'
+              positive ? 'text-seed-800' : 'text-muted'
             }`}
           >
             {positive ? 'Resultado del mes' : 'Salió más de lo que entró'}
@@ -79,7 +79,7 @@ export function MonthCloseSheet({
           {/* Si el patrimonio no se movió, la línea no dice nada: mejor callarla
               que escribir «0 €» y dar a entender que se ha medido algo. */}
           {draft.netWorthDelta !== 0 ? (
-            <p className={`mt-2 text-[13px] tnum ${positive ? 'text-seed-800/80' : 'text-muted'}`}>
+            <p className={`mt-2 text-[13px] tnum ${positive ? 'text-seed-800' : 'text-muted'}`}>
               Patrimonio: {formatCurrency(draft.netWorthDelta, { signed: true })} este mes.
             </p>
           ) : null}
@@ -107,7 +107,7 @@ export function MonthCloseSheet({
           ))}
         </div>
 
-        <p className="text-[12px] leading-relaxed text-stone-400">
+        <p className="text-[12px] leading-relaxed text-muted">
           {capitalize(monthLabel(draft.month, { capitalize: false }))} queda guardado tal como está ahora. Si
           después aparece algo que faltaba, se puede reabrir desde el histórico.
         </p>
